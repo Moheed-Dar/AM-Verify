@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Code2,
   ShoppingBag,
@@ -8,6 +9,7 @@ import {
   Palette,
   Clapperboard,
   Smartphone,
+  ArrowRight,
 } from "lucide-react";
 
 const services = [
@@ -15,131 +17,228 @@ const services = [
     icon: Code2,
     title: "Website Development",
     description: "Modern and responsive websites built with high performance and clean UI/UX experience.",
+    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2064&auto=format&fit=crop",
   },
   {
     icon: ShoppingBag,
     title: "Ecommerce",
     description: "Scalable ecommerce solutions with secure payments and smooth shopping experience.",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop",
   },
   {
     icon: MonitorSmartphone,
     title: "Web Applications",
     description: "Custom web applications tailored to your business needs with modern technologies.",
+    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d2ViJTIwYXBwbGljYXRpb258ZW58MHx8MHx8fDA%3D",
   },
   {
     icon: Palette,
     title: "Branding",
     description: "Creative branding solutions including logo design, identity systems and brand strategy.",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2070&auto=format&fit=crop",
   },
   {
     icon: Clapperboard,
     title: "Animations",
     description: "Professional animations and motion graphics to make your business visually engaging.",
+    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop",
   },
   {
     icon: Smartphone,
     title: "Mobile Applications",
     description: "Cross-platform mobile apps with seamless performance and beautiful user experience.",
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
 export default function Services() {
+  const [activeService, setActiveService] = useState(0);
+
   return (
-    <section id="services" className="relative bg-black py-24 overflow-hidden">
-      {/* Background Depth Layers */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(251,146,60,0.08)_0%,_transparent_70%)]" />
+    <section id="services" className="relative bg-[#050505] py-20 md:py-24 overflow-hidden">
+      {/* Background Ambient Lights */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
       <div className="absolute inset-0 opacity-[0.03]">
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
             `,
-            backgroundSize: "60px 60px",
+            backgroundSize: "80px 80px",
           }}
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Heading Section */}
+      {/* Added more horizontal padding and reduced max-width for compact look */}
+      <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-12 lg:px-16">
+        
+        {/* Header - Reduced Size */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-12 md:mb-16"
         >
-          <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-orange-400 uppercase bg-orange-500/10 rounded-full border border-orange-500/20">
+          <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-[0.2em] text-[#e1c693] uppercase bg-[#e1c693]/5 rounded-full border border-[#e1c693]/20 backdrop-blur-sm">
             What We Do
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
             Services We{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               Offer
             </span>
           </h2>
-          <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
-            We craft digital experiences that drive growth, engagement, and lasting impact.
-          </p>
         </motion.div>
 
-        {/* Services Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -8, scale: 1.02 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="group relative min-h-[280px] rounded-2xl bg-white/[0.02] border border-white/10 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center text-center p-6 cursor-pointer"
-              >
-                {/* Gradient Border Glow Effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-500/20 via-transparent to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="absolute inset-[1px] rounded-2xl bg-black" />
+        {/* Main Interactive Layout */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          
+          {/* Left Side: Service List - Reduced Padding & Sizes */}
+          <div className="w-full lg:w-1/2 flex flex-col divide-y divide-white/5">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              const isActive = activeService === index;
 
-                {/* Inner Content */}
-                <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                  {/* Icon Container */}
-                  <div className="mb-5 flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500/10 to-transparent border border-orange-500/20 group-hover:border-orange-400/40 group-hover:shadow-[0_0_20px_rgba(251,146,60,0.3)] transition-all duration-300">
-                    <Icon className="w-7 h-7 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  onMouseEnter={() => setActiveService(index)}
+                  onClick={() => setActiveService(index)} // For mobile tap
+                  className={`group relative flex items-center justify-between py-4 cursor-pointer transition-all duration-500 ${
+                    isActive ? "pl-5" : "pl-0 opacity-60 hover:opacity-100 hover:pl-3"
+                  }`}
+                >
+                  {/* Active Golden Left Border */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeServiceBorder"
+                      className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#e1c693] to-[#a78b54] rounded-full"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+
+                  <div className="flex items-center gap-4">
+                    {/* Number */}
+                    <span className={`text-xs font-bold transition-colors duration-300 ${isActive ? 'text-[#e1c693]' : 'text-gray-700'}`}>
+                      0{index + 1}
+                    </span>
+
+                    {/* Icon - Reduced size */}
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-500 ${
+                      isActive 
+                        ? "bg-[#e1c693]/10 border-[#e1c693]/40 text-[#e1c693]" 
+                        : "bg-white/5 border-white/10 text-gray-500 group-hover:border-white/30 group-hover:text-gray-300"
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+
+                    {/* Title - Reduced size */}
+                    <h3 className={`text-lg md:text-xl font-semibold transition-colors duration-300 ${
+                      isActive ? "text-white" : "text-gray-400 group-hover:text-white"
+                    }`}>
+                      {service.title}
+                    </h3>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-white text-lg font-bold tracking-tight mb-2 group-hover:text-orange-300 transition-colors duration-300">
-                    {service.title}
-                  </h3>
+                  {/* Arrow - Reduced size */}
+                  <motion.div
+                    animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-8 h-8 rounded-full bg-[#e1c693]/10 border border-[#e1c693]/30 flex items-center justify-center text-[#e1c693]"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-                  {/* Description */}
-                  <p className="text-sm text-gray-400 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300 max-w-[90%]">
-                    {service.description}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+          {/* Right Side: Dynamic Image Showcase - Reduced Height */}
+          <div className="hidden lg:block w-1/2 relative">
+            <div className="sticky top-28 h-[450px] w-full rounded-2xl overflow-hidden border border-white/5 shadow-2xl shadow-black/50">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeService}
+                  initial={{ opacity: 0, scale: 1.1, filter: "grayscale(100%)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "grayscale(0%)" }}
+                  exit={{ opacity: 0, scale: 0.95, filter: "grayscale(100%)" }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <img
+                    src={services[activeService].image}
+                    alt={services[activeService].title}
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Heavy Gradient Overlay for Text */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-[#e1c693]/10 mix-blend-overlay"></div>
+
+                  {/* Floating Content on Image */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2, duration: 0.5 }}
+                    >
+                      <h4 className="text-2xl font-black text-white mb-2 drop-shadow-lg">
+                        {services[activeService].title}
+                      </h4>
+                      <p className="text-gray-300 text-sm leading-relaxed max-w-sm drop-shadow-md">
+                        {services[activeService].description}
+                      </p>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Mobile View: Image Card - Reduced Height */}
+          <div className="lg:hidden w-full">
+             <AnimatePresence mode="wait">
+               <motion.div
+                 key={activeService}
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 exit={{ opacity: 0, y: -20 }}
+                 transition={{ duration: 0.4 }}
+                 className="relative w-full h-[320px] rounded-2xl overflow-hidden border border-white/5"
+               >
+                 <img
+                   src={services[activeService].image}
+                   alt={services[activeService].title}
+                   className="w-full h-full object-cover"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent"></div>
+                 
+                 <div className="absolute bottom-0 left-0 right-0 p-6">
+                   <div className="w-8 h-8 rounded-lg bg-[#e1c693]/20 border border-[#e1c693]/40 flex items-center justify-center mb-3">
+                     {(() => {
+                       const Icon = services[activeService].icon;
+                       return <Icon className="w-4 h-4 text-[#e1c693]" />;
+                     })()}
+                   </div>
+                   <h4 className="text-xl font-bold text-white mb-1">
+                     {services[activeService].title}
+                   </h4>
+                   <p className="text-gray-400 text-sm leading-relaxed">
+                     {services[activeService].description}
+                   </p>
+                 </div>
+               </motion.div>
+             </AnimatePresence>
+          </div>
+
+        </div>
       </div>
     </section>
   );

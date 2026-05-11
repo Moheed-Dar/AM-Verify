@@ -2,12 +2,46 @@
 
 :root {
   --font-poppins: "Poppins", system-ui, sans-serif;
+
+  /* Golden Scrollbar Theme */
+  --scrollbar-thumb: #d4af37;        /* Gold */
+  --scrollbar-thumb-hover: #b8901f;  /* Darker Gold */
+  --scrollbar-track: #f8f5ec;        /* Light warm background */
 }
 
 body {
   font-family: var(--font-poppins);
+  overflow-x: hidden;
 }
 
-.section {
-  scroll-margin-top: 80px;
+html {
+  scroll-behavior: auto;
+}
+
+/* =============== GOLDEN SCROLLBAR =============== */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }

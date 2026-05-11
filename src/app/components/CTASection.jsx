@@ -5,76 +5,99 @@ import { motion } from "framer-motion";
 
 export default function CTASection() {
   return (
-    <section className="relative w-full min-h-[350px] overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80"
-          alt="Team collaboration"
-          className="w-full h-full object-cover"
+    <section className="relative bg-[#050505] py-16 md:py-24 overflow-hidden">
+      {/* Background Grid */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
+          }}
         />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/85" />
-        {/* Top & Bottom fade */}
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-20 text-center">
-        {/* Heading */}
-        <motion.h2
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+        
+        {/* Ambient Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#e1c693]/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        {/* Compact Main Container */}
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-5xl lg:text-6xl font-black text-white tracking-tight mb-5"
+          className="relative rounded-2xl overflow-hidden border border-[#e1c693]/20 bg-[#0a0a0a] shadow-xl shadow-black/20"
         >
-          Let's Talk Right Away
-        </motion.h2>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-8"
-        >
-          Collaborate with our digital design, development and marketing
-          professionals to step-up financial performance of your brand.
-        </motion.p>
-
-        {/* Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          {/* Let's Talk Button */}
-          <a
-            href="#contact"
-            className="group relative inline-flex items-center justify-center gap-2 px-10 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm rounded-lg overflow-hidden transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:scale-105"
-          >
-            <span className="relative z-10">Let's Talk</span>
-            <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            {/* Shine effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          </a>
-
-          {/* Phone Button */}
-          <a
-            href="tel:+18774766927"
-            className="group inline-flex items-center justify-center gap-3 px-10 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold text-sm rounded-lg transition-all duration-300 hover:bg-white/20 hover:border-orange-500/40 hover:scale-105"
-          >
-            <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
-              <Phone className="w-3 h-3 text-white" />
+          <div className="grid md:grid-cols-2">
+            
+            {/* Left Side: Compact Cinematic Image */}
+            <div className="relative h-64 md:h-full min-h-[320px] overflow-hidden group">
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80"
+                alt="Team collaboration"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+              />
+              {/* Overlays */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]/90 hidden md:block"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:hidden"></div>
+              
+              {/* Small Floating Badge */}
+              <div className="absolute top-6 left-6 bg-black/50 backdrop-blur-md border border-[#e1c693]/30 px-4 py-1.5 rounded-full">
+                <span className="text-[#e1c693] text-[10px] font-bold uppercase tracking-widest">24/7 Support</span>
+              </div>
             </div>
-            <span>+1-(877) 476-6927</span>
-          </a>
+
+            {/* Right Side: Content (Compact) */}
+            <div className="relative p-8 md:p-10 flex flex-col justify-center">
+              {/* Heading */}
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-4 leading-tight">
+                Let's Talk{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
+                  Right Away
+                </span>
+              </h2>
+
+              {/* Description */}
+              <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
+                Collaborate with our digital design, development and marketing professionals to step-up financial performance of your brand.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-start gap-3">
+                {/* Let's Talk Button */}
+                <motion.a
+                  href="#contact"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-xs rounded-lg overflow-hidden transition-all duration-300 shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40"
+                >
+                  <span className="relative z-10">Start a Project</span>
+                  <ArrowRight className="relative z-10 w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                </motion.a>
+
+                {/* Phone Button */}
+                <motion.a
+                  href="tel:+18774766927"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="group inline-flex items-center justify-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-white font-medium text-xs rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-[#e1c693]/30"
+                >
+                  <div className="w-7 h-7 rounded-full bg-[#e1c693]/10 border border-[#e1c693]/30 flex items-center justify-center">
+                    <Phone className="w-3 h-3 text-[#e1c693]" />
+                  </div>
+                  <span>+1-(877) 476-6927</span>
+                </motion.a>
+              </div>
+            </div>
+          </div>
         </motion.div>
+
       </div>
     </section>
   );

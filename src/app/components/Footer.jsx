@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   ArrowRight, 
@@ -15,12 +16,8 @@ import {
   Globe,
   Heart,
   ArrowUp,
-  Share2,
-  MessageCircle,
-  User,
-  Box,
-  Monitor,
-  Terminal
+  Sparkles,
+  MoveUpRight
 } from "lucide-react";
 
 export default function Footer() {
@@ -29,389 +26,249 @@ export default function Footer() {
   };
 
   const servicesLinks = [
-    { name: "Website Development", href: "/services/web-development", icon: Code2 },
-    { name: "Ecommerce Solutions", href: "/services/ecommerce", icon: ShoppingBag },
-    { name: "Branding & Identity", href: "/services/branding", icon: Palette },
-    { name: "Mobile Applications", href: "/services/mobile-apps", icon: Smartphone },
-    { name: "Video Animation", href: "/services/animation", icon: Play },
-    { name: "SEO Optimization", href: "/services/seo", icon: Globe },
+    { name: "Website Development", icon: Code2 },
+    { name: "Ecommerce Solutions", icon: ShoppingBag },
+    { name: "Branding & Identity", icon: Palette },
+    { name: "Mobile Applications", icon: Smartphone },
+    { name: "Video Animation", icon: Play },
+    { name: "SEO Optimization", icon: Globe },
   ];
 
   const companyLinks = [
-    { name: "About Us", href: "/about" },
-    { name: "Our Team", href: "/team" },
-    { name: "Careers", href: "/careers" },
-    { name: "Case Studies", href: "/portfolio" },
-    { name: "Testimonials", href: "/testimonials" },
-    { name: "Blog", href: "/blog" },
+    "About Us",
+    "Our Team",
+    "Careers",
+    "Case Studies",
+    "Testimonials",
+    "Blog",
   ];
 
   const supportLinks = [
-    { name: "Help Center", href: "/support" },
-    { name: "FAQs", href: "/faq" },
-    { name: "Contact Us", href: "/contact" },
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Sitemap", href: "/sitemap" },
+    "Help Center",
+    "FAQs",
+    "Contact Us",
+    "Privacy Policy",
+    "Terms of Service",
+    "Sitemap",
   ];
-
-  const quickLinks = [
-    { name: "Get a Quote", href: "/quote" },
-    { name: "Free Consultation", href: "/consultation" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Affiliate Program", href: "/affiliate" },
-    { name: "Partner With Us", href: "/partners" },
-    { name: "Resources", href: "/resources" },
-  ];
-
-  // Using generic icons to avoid build errors with brand icons in some lucide versions
-  // If you want brand icons, update lucide-react: npm install lucide-react@latest
-  const socialLinks = [
-    { icon: Share2, href: "#", label: "Facebook" },
-    { icon: MessageCircle, href: "#", label: "Twitter" },
-    { icon: User, href: "#", label: "Instagram" },
-    { icon: Globe, href: "#", label: "LinkedIn" },
-    { icon: Terminal, href: "#", label: "GitHub" },
-    { icon: Monitor, href: "#", label: "YouTube" },
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
 
   return (
-    <footer className="relative bg-black overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(251,146,60,0.08)_0%,_transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(251,146,60,0.05)_0%,_transparent_50%)]" />
-      <div className="absolute inset-0 opacity-[0.03]">
+    <footer className="relative bg-[#020202] overflow-hidden">
+      {/* Background Ambient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(225,198,147,0.06)_0%,_transparent_50%)]" />
+      <div className="absolute inset-0 opacity-[0.02]">
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
             `,
-            backgroundSize: "60px 60px",
+            backgroundSize: "80px 80px",
           }}
         />
       </div>
 
-      {/* Top Glow Line */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
-
-      <div className="relative z-10">
-        {/* ===== NEWSLETTER SECTION ===== */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="border-b border-white/10"
-        >
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-              <div className="text-center lg:text-left">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Stay Updated with{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-                    Our News
-                  </span>
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Subscribe to our newsletter and get the latest updates delivered to your inbox.
-                </p>
-              </div>
-              
-              <div className="flex w-full lg:w-auto gap-3">
-                <div className="relative flex-1 lg:w-80">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/10 transition-all duration-300"
-                  />
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 whitespace-nowrap"
-                >
-                  <Send className="w-4 h-4" />
-                  <span className="hidden sm:inline">Subscribe</span>
-                </motion.button>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ===== MAIN FOOTER ===== */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-8 md:px-12">
+        
+        {/* ===== 1. MASSIVE CTA SECTION ===== */}
+        <div className="py-20 md:py-32 border-b border-white/5">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 lg:gap-8"
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto"
           >
-            {/* Brand Section */}
-            <motion.div variants={itemVariants} className="lg:col-span-2">
-              <a href="/" className="inline-flex items-center gap-3 mb-6 group">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center group-hover:rotate-6 transition-transform duration-300">
-                    <span className="text-white font-bold text-2xl">M</span>
-                  </div>
-                  <motion.div
-                    className="absolute -bottom-1 -right-1 w-3 h-3 bg-orange-400 rounded-full"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </div>
-                <div>
-                  <span className="text-2xl font-bold text-white">
-                    AM-Verify<span className="text-orange-500">.</span>
-                  </span>
-                  <p className="text-[10px] text-white/50 uppercase tracking-[0.2em]">Agency</p>
-                </div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#e1c693]/5 border border-[#e1c693]/30 rounded-full mb-8 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-[#e1c693]" />
+              <span className="text-[#e1c693] text-xs font-bold uppercase tracking-wider">Start a Project</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tight mb-8">
+              Have an idea?{" "}
+              <br className="hidden md:block" />
+              <span 
+                className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54] italic"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Let's talk
+              </span>{" "}
+              about it.
+            </h2>
+
+            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+              Collaborate with our digital design, development and marketing professionals to step-up financial performance of your brand.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <motion.a
+                href="/contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-xl shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40 transition-all duration-300 overflow-hidden"
+              >
+                <span className="relative z-10">Get a Free Consultation</span>
+                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              </motion.a>
+
+              <a
+                href="tel:+18774766927"
+                className="inline-flex items-center gap-3 px-10 py-4 border border-white/10 text-white font-semibold text-sm rounded-xl hover:bg-white/5 hover:border-[#e1c693]/30 transition-all duration-300"
+              >
+                <Phone className="w-4 h-4 text-[#e1c693]" /> +1-(877) 476-6927
               </a>
-
-              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
-                We craft digital experiences that drive growth, engagement, and lasting impact. 
-                Let's build something extraordinary together.
-              </p>
-
-              {/* Contact Info */}
-              <div className="space-y-4">
-                <a
-                  href="tel:+18774766927"
-                  className="flex items-center gap-3 text-gray-400 hover:text-orange-400 transition-colors duration-300 group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-orange-500/30 group-hover:bg-orange-500/10 transition-all duration-300">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm">+1-(877) 476-6927</span>
-                </a>
-
-                <a
-                  href="mailto:info@AM-Verify.com"
-                  className="flex items-center gap-3 text-gray-400 hover:text-orange-400 transition-colors duration-300 group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-orange-500/30 group-hover:bg-orange-500/10 transition-all duration-300">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm">info@AM-Verify.com</span>
-                </a>
-
-                <div className="flex items-center gap-3 text-gray-400 group">
-                  <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm">New York, USA</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Services Links */}
-            <motion.div variants={itemVariants}>
-              <h4 className="text-white font-bold text-base mb-5 relative inline-block">
-                Services
-                <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" />
-              </h4>
-              <ul className="space-y-3">
-                {servicesLinks.map((link, index) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
-                    >
-                      {/* Animated Bullet Point */}
-                      <motion.div
-                        className="w-1.5 h-1.5 rounded-full bg-orange-500 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
-                        whileHover={{ scale: 1.5 }}
-                      />
-                      <motion.span
-                        className="text-sm"
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {link.name}
-                      </motion.span>
-                      <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-orange-400" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Company Links */}
-            <motion.div variants={itemVariants}>
-              <h4 className="text-white font-bold text-base mb-5 relative inline-block">
-                Company
-                <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" />
-              </h4>
-              <ul className="space-y-3">
-                {companyLinks.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
-                    >
-                      <motion.div
-                        className="w-1.5 h-1.5 rounded-full bg-orange-500 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
-                        whileHover={{ scale: 1.5 }}
-                      />
-                      <motion.span
-                        className="text-sm"
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {link.name}
-                      </motion.span>
-                      <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-orange-400" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Support Links */}
-            <motion.div variants={itemVariants}>
-              <h4 className="text-white font-bold text-base mb-5 relative inline-block">
-                Support
-                <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" />
-              </h4>
-              <ul className="space-y-3">
-                {supportLinks.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
-                    >
-                      <motion.div
-                        className="w-1.5 h-1.5 rounded-full bg-orange-500 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
-                        whileHover={{ scale: 1.5 }}
-                      />
-                      <motion.span
-                        className="text-sm"
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {link.name}
-                      </motion.span>
-                      <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-orange-400" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Quick Links */}
-            <motion.div variants={itemVariants}>
-              <h4 className="text-white font-bold text-base mb-5 relative inline-block">
-                Quick Links
-                <span className="absolute -bottom-1 left-0 w-8 h-[2px] bg-gradient-to-r from-orange-500 to-amber-500 rounded-full" />
-              </h4>
-              <ul className="space-y-3">
-                {quickLinks.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
-                    >
-                      <motion.div
-                        className="w-1.5 h-1.5 rounded-full bg-orange-500 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
-                        whileHover={{ scale: 1.5 }}
-                      />
-                      <motion.span
-                        className="text-sm"
-                        whileHover={{ x: 4 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {link.name}
-                      </motion.span>
-                      <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-orange-400" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
 
-        {/* ===== SOCIAL & BOTTOM BAR ===== */}
-        <div className="border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              {/* Social Links */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="flex items-center gap-2"
-              >
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    whileHover={{ y: -4, scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-orange-500/40 hover:bg-orange-500/10 hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300"
-                  >
-                    <social.icon className="w-4 h-4" />
-                  </motion.a>
-                ))}
-              </motion.div>
+        {/* ===== 2. MAIN FOOTER GRID ===== */}
+        <div className="py-16 md:py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+          
+          {/* Brand & Contact Column */}
+          <div className="lg:col-span-4">
+            <a href="/" className="inline-flex items-center gap-3 mb-8 group">
+              {/* Local Image Logo from Public Folder */}
+              <img 
+                src="/images/img1.png" 
+                alt="AM-Verify Logo" 
+                className="h-12 w-12 object-contain rounded-lg"
+              />
+              <div>
+                <span className="text-2xl font-bold text-white tracking-tight">
+                  AM-Verify<span className="text-[#e1c693]">.</span>
+                </span>
+                <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em]">Digital Agency</p>
+              </div>
+            </a>
 
-              {/* Copyright */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-gray-500 text-sm text-center md:text-right"
-              >
-                © 2026{" "}
-                <span className="text-white font-semibold">AM-Verify.</span>{" "}
-                All rights reserved. Made with{" "}
-                <Heart className="w-3.5 h-3.5 inline text-orange-500 fill-orange-500 animate-pulse" />{" "}
-                in USA
-              </motion.p>
+            <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-xs">
+              We craft digital experiences that drive growth, engagement, and lasting impact for brands worldwide.
+            </p>
+
+            <div className="space-y-4">
+              <a href="tel:+18774766927" className="flex items-center gap-4 text-gray-400 hover:text-[#e1c693] transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#e1c693]/30 transition-all">
+                  <Phone className="w-4 h-4" />
+                </div>
+                <span className="text-sm">+1-(877) 476-6927</span>
+              </a>
+              <a href="mailto:info@AM-Verify.com" className="flex items-center gap-4 text-gray-400 hover:text-[#e1c693] transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#e1c693]/30 transition-all">
+                  <Mail className="w-4 h-4" />
+                </div>
+                <span className="text-sm">info@AM-Verify.com</span>
+              </a>
+              <div className="flex items-center gap-4 text-gray-400">
+                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <span className="text-sm">New York, USA</span>
+              </div>
             </div>
+          </div>
+
+          {/* Services Column */}
+          <div className="lg:col-span-3">
+            <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
+              <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Services
+            </h4>
+            <ul className="space-y-4">
+              {servicesLinks.map((link) => (
+                <li key={link.name}>
+                  <a href="#" className="group flex items-center gap-3 text-gray-400 hover:text-[#e1c693] transition-all duration-300">
+                    <link.icon className="w-4 h-4 text-gray-600 group-hover:text-[#e1c693] transition-colors" />
+                    <span className="text-sm border-b border-transparent group-hover:border-[#e1c693]/30 pb-0.5 transition-all">{link.name}</span>
+                    <MoveUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-[#e1c693]" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company & Support Combined Column */}
+          <div className="lg:col-span-2 grid grid-cols-2 gap-8 lg:grid-cols-1 lg:gap-6">
+            <div>
+              <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
+                <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Company
+              </h4>
+              <ul className="space-y-4">
+                {companyLinks.map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-gray-400 hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-[#e1c693] transition-colors"></span> {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
+                <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Support
+              </h4>
+              <ul className="space-y-4">
+                {supportLinks.slice(0, 5).map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-gray-400 hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group">
+                      <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-[#e1c693] transition-colors"></span> {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Newsletter Column (Glassmorphic) */}
+          <div className="lg:col-span-3">
+            <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group">
+              {/* Ambient glow inside card */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e1c693]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+              
+              <h4 className="text-white font-bold text-base mb-2 relative z-10">Newsletter</h4>
+              <p className="text-gray-500 text-xs mb-5 leading-relaxed relative z-10">Get the latest updates and insights directly to your inbox.</p>
+              <div className="space-y-3 relative z-10">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#e1c693]/50 text-sm"
+                />
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#e1c693]/20 transition-all duration-300">
+                  Subscribe <Send className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== 3. BOTTOM BAR ===== */}
+        <div className="border-t border-white/5 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-gray-500 text-xs text-center md:text-left"
+          >
+            © 2026 <span className="text-white font-semibold">AM-Verify.</span> All rights reserved. Crafted with <Heart className="w-3 h-3 inline text-[#e1c693] fill-[#e1c693]" /> in USA
+          </motion.p>
+
+          <div className="flex items-center gap-6 text-xs text-gray-500">
+            <a href="#" className="hover:text-[#e1c693] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#e1c693] transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-[#e1c693] transition-colors">Sitemap</a>
           </div>
         </div>
       </div>
 
-      {/* ===== SCROLL TO TOP BUTTON ===== */}
+      {/* ===== SCROLL TO TOP ===== */}
       <motion.button
         onClick={scrollToTop}
         whileHover={{ y: -3, scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow duration-300 group"
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full border border-[#e1c693]/50 bg-[#020202] text-[#e1c693] flex items-center justify-center shadow-lg shadow-black/50 hover:bg-[#e1c693] hover:text-black transition-all duration-300 group"
       >
         <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-400 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
       </motion.button>
     </footer>
   );

@@ -1,499 +1,505 @@
 "use client";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sun, Moon, X, Info } from 'lucide-react';
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Mail, MapPin } from "lucide-react";
+// --- Icons Updated ---
+const Icons = {
+    Home: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>,
+    About: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>,
+    Work: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>,
+    Services: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>,
+    Contact: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>,
+    Phone: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>,
+    Menu: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" /></svg>,
+    X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+};
 
-export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+const BadgeIcons = {
+    Star: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
+    Shield: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>,
+    Award: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>,
+    Crown: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" /></svg>,
+    Palette: () => <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></svg>,
+};
+
+const fadeInLeft = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const fadeInRight = {
+    hidden: { opacity: 0, x: 50, scale: 0.95 },
+    visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.8, ease: "easeOut", delay: 0.3 } }
+};
+
+const popupVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+    exit: { opacity: 0, scale: 0.8, y: 20, transition: { duration: 0.2 } }
+};
+
+const LandingPage = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isDark, setIsDark] = useState(true);
+    const [activeSection, setActiveSection] = useState('home');
+    const [showThemePopup, setShowThemePopup] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
-
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const handleScroll = () => setIsScrolled(window.scrollY > 80);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Body scroll lock when mobile menu is open
+    // Handle URL hash on load and hash change
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
+        const handleHashChange = () => {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            setActiveSection(hash);
+            
+            // Smooth scroll to element if exists
+            const element = document.getElementById(hash);
+            if (element) {
+                const offsetTop = element.offsetTop - 120; // Account for fixed navbar
+                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            }
+        };
+
+        // Handle initial hash on page load
+        if (window.location.hash) {
+            setTimeout(handleHashChange, 100);
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    useEffect(() => {
+        const sections = document.querySelectorAll('section[id], main[id]');
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    setActiveSection(id);
+                    // Update URL without scrolling
+                    if (window.location.hash !== `#${id}`) {
+                        window.history.replaceState(null, null, `#${id}`);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') setShowThemePopup(false);
+        };
+        if (showThemePopup) {
+            document.addEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'hidden';
         }
         return () => {
-            document.body.style.overflow = "unset";
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [showThemePopup]);
+
+    // Updated navigation handler that updates URL
+    const handleNavigation = (e, href, id) => {
+        e.preventDefault();
+        
+        // Update URL hash
+        window.history.pushState(null, null, href);
+        setActiveSection(id);
+        
+        // Smooth scroll to section
+        const element = document.getElementById(id);
+        if (element) {
+            const offsetTop = id === 'home' ? 0 : element.offsetTop - 120;
+            window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+        }
+        
+        setIsMenuOpen(false);
+    };
+
+    const handleThemeToggle = () => {
+        setShowThemePopup(true);
+    };
 
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "About", href: "#about" },
-        { name: "Work", href: "#work" },
-        { name: "Services", href: "#services" },
-        { name: "Contact", href: "#contact" },
+        { name: 'Home', href: '#home', id: 'home', icon: <Icons.Home /> },
+        { name: 'About', href: '#about', id: 'about', icon: <Icons.About /> },
+        { name: 'Work', href: '#work', id: 'work', icon: <Icons.Work /> },
+        { name: 'Services', href: '#services', id: 'services', icon: <Icons.Services /> },
+        { name: 'Contact', href: '#contact', id: 'contact', icon: <Icons.Contact /> },
     ];
 
-    // Animation variants
-    const menuVariants = {
-        closed: {
-            x: "100%",
-            transition: {
-                type: "spring",
-                stiffness: 400,
-                damping: 40,
-            },
-        },
-        open: {
-            x: 0,
-            transition: {
-                type: "spring",
-                stiffness: 400,
-                damping: 40,
-                staggerChildren: 0.1,
-                delayChildren: 0.2,
-            },
-        },
-    };
-
-    const linkVariants = {
-        closed: {
-            x: 50,
-            opacity: 0,
-        },
-        open: {
-            x: 0,
-            opacity: 1,
-            transition: {
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-            },
-        },
-    };
-
-    const backdropVariants = {
-        closed: {
-            opacity: 0,
-            transition: {
-                duration: 0.3,
-            },
-        },
-        open: {
-            opacity: 1,
-            transition: {
-                duration: 0.3,
-            },
-        },
-    };
-
-    const bottomSectionVariants = {
-        closed: {
-            y: 30,
-            opacity: 0,
-        },
-        open: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                delay: 0.6,
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-            },
-        },
-    };
-
-    // Hamburger line animations
-    const topLineVariants = {
-        closed: { rotate: 0, y: 0 },
-        open: { rotate: 45, y: 8 },
-    };
-
-    const middleLineVariants = {
-        closed: { opacity: 1, x: 0 },
-        open: { opacity: 0, x: -20 },
-    };
-
-    const bottomLineVariants = {
-        closed: { rotate: 0, y: 0 },
-        open: { rotate: -45, y: -8 },
-    };
-
-    if (!mounted) {
-        return (
-            <>
-                {/* Top Bar */}
-                <div className="fixed top-0 left-0 right-0 z-60 h-10 overflow-hidden">
-                    <div className="absolute inset-0 animate-rgb-shift" />
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-                        <div className="flex items-center gap-6">
-                            <span className="text-white/90 text-xs flex items-center gap-1.5">
-                                <Phone className="w-3 h-3" />
-                                +1-(877) 476-8927
-                            </span>
-                            <span className="text-white/90 text-xs hidden sm:flex items-center gap-1.5">
-                                <Mail className="w-3 h-3" />
-                                info@Offical.com
-                            </span>
-                        </div>
-                        <span className="text-white/90 text-xs hidden md:flex items-center gap-1.5">
-                            <MapPin className="w-3 h-3" />
-                            New York, USA
-                        </span>
-                    </div>
-                </div>
-                {/* Main Navbar */}
-                <nav className="fixed top-10 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl z-50 border-b border-white/10">
-                    <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                        <h1 className="text-2xl font-bold text-white tracking-tight">
-                            <span className="text-orange-500">AM-Verify</span>.
-                        </h1>
-                        <div className="hidden lg:flex items-center gap-8">
-                            {navLinks.map((link) => (
-                                <span
-                                    key={link.name}
-                                    className="text-white/80 text-sm font-medium"
-                                >
-                                    {link.name}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                </nav>
-            </>
-        );
-    }
+    const achievements = [
+        { icon: <BadgeIcons.Shield />, title: 'Google Partner', desc: 'Premier Status' },
+        { icon: <BadgeIcons.Star />, title: 'Clutch Top Agency', desc: '2024 & 2025' },
+        { icon: <BadgeIcons.Crown />, title: 'Meta Business', desc: 'Certified Partner' },
+        { icon: <BadgeIcons.Award />, title: 'Bing Ads', desc: 'Accredited Pro' },
+        { icon: <BadgeIcons.Palette />, title: 'Adobe Creative', desc: 'Enterprise Level' },
+    ];
 
     return (
-        <>
-            {/* ===== ANIMATED RGB TOP BAR ===== */}
-            <motion.div
-                initial={{ y: -40 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed top-0 left-0 right-0 z-60 h-10 overflow-hidden"
-            >
-                {/* Animated RGB Background */}
-                <div className="absolute inset-0 animate-rgb-gradient" />
-                <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <motion.a
-                            href="tel:+18774768927"
-                            className="text-white/90 text-xs flex items-center gap-1.5 hover:text-white transition-colors"
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <Phone className="w-3 h-3" />
-                            <span className="hidden sm:inline">+1-(877) 476-8927</span>
-                            <span className="sm:hidden">Call Us</span>
-                        </motion.a>
-                        <motion.a
-                            href="mailto:info@AM-Verify.com"
-                            className="text-white/90 text-xs hidden sm:flex items-center gap-1.5 hover:text-white transition-colors"
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <Mail className="w-3 h-3" />
-                            info@AM-Verify.com
-                        </motion.a>
-                    </div>
-                    <motion.span
-                        className="text-white/90 text-xs hidden md:flex items-center gap-1.5"
-                        whileHover={{ scale: 1.05 }}
-                    >
-                        <MapPin className="w-3 h-3" />
-                        New York, USA
-                    </motion.span>
-                </div>
-            </motion.div>
+        <div className={`min-h-screen overflow-x-hidden relative transition-colors duration-500 ${isDark ? 'bg-[#050505] text-gray-200' : 'bg-[#f5f5f7] text-gray-900'}`} style={{ fontFamily: "'Outfit', sans-serif" }}>
 
-            {/* ===== MAIN NAVBAR ===== */}
-            <motion.nav
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
-                className={`fixed top-10 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-                        ? "bg-[#0a0a0a]/95 backdrop-blur-xl shadow-2xl shadow-black/20 border-b border-white/10"
-                        : "bg-transparent"
-                    }`}
-            >
-                <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
+            {/* Google Fonts */}
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+
+            {/* Background Grid & Ambient Lights */}
+            <div className={`fixed inset-0 z-0 transition-opacity duration-500 ${isDark ? 'bg-[radial-gradient(ellipse_at_top_right,_rgba(225,198,147,0.08)_0%,_transparent_50%)]' : 'bg-[radial-gradient(ellipse_at_top_right,_rgba(225,198,147,0.15)_0%,_transparent_50%)]'}`} />
+            <div className="fixed inset-0 z-0 opacity-[0.03]">
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        backgroundImage: `
+              linear-gradient(${isDark ? 'rgba(225,198,147,0.2)' : 'rgba(225,198,147,0.3)'} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? 'rgba(225,198,147,0.2)' : 'rgba(225,198,147,0.3)'} 1px, transparent 1px)
+            `,
+                        backgroundSize: "80px 80px",
+                    }}
+                />
+            </div>
+
+            {/* 1. NAVBAR */}
+            <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'py-2 backdrop-blur-xl shadow-xl border-b' : 'py-4 md:py-5 bg-transparent'} ${isScrolled ? (isDark ? 'bg-[#050505]/90 border-white/5' : 'bg-white/90 border-gray-200') : ''}`}>
+                <div className="max-w-6xl mx-auto px-6 md:px-12">
+                    <div className={`${isDark ? 'bg-[#0a0a0a01] border-white/10' : 'bg-white border-gray-200'} border shadow-md rounded-lg px-4 md:px-10 py-3 md:py-4 flex justify-between items-center transition-all duration-300 backdrop-blur-md ${isScrolled ? 'shadow-lg border-[#e1c693]/30' : ''}`}>
+
                         {/* Logo */}
-                        <motion.a
-                            href="#home"
-                            className="flex items-center gap-2 group"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            <motion.div
-                                className="relative"
-                                whileHover={{ rotate: 12 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                            >
-                                <div className="w-10 h-10 bg-linear-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-xl">M</span>
-                                </div>
-                                <motion.div
-                                    className="absolute -bottom-1 -right-1 w-3 h-3 bg-orange-400 rounded-full"
-                                    animate={{ scale: [1, 1.2, 1] }}
-                                    transition={{
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        ease: "easeInOut",
-                                    }}
-                                />
-                            </motion.div>
-                            <div className="flex flex-col">
-                                <span className="text-2xl font-bold text-white tracking-tight leading-none whitespace-nowrap">
-                                    AM-Verify<span className="text-orange-500">.</span>
-                                </span>
-                                <span className="text-[10px] text-white/50 uppercase tracking-[0.2em] font-medium whitespace-nowrap">
-                                    Agency
-                                </span>
-                            </div>
-                        </motion.a>
+                        <a href="#home" onClick={(e) => handleNavigation(e, '#home', 'home')} className="flex items-center flex-shrink-0 z-10">
+                            <img
+                                src="/images/img1.png"
+                                alt="AM-Verify Logo"
+                                className="h-10 w-10 md:h-12 md:w-12 object-contain rounded-md"
+                            />
+                        </a>
 
-                        {/* Desktop Navigation */}
-                        <div className="hidden lg:flex items-center gap-1">
+                        {/* Desktop Menu */}
+                        <ul className={`hidden md:flex items-center justify-center flex-1 gap-8 lg:gap-10 text-sm font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                             {navLinks.map((link) => (
-                                <motion.a
-                                    key={link.name}
-                                    href={link.href}
-                                    className="relative px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors duration-300 group overflow-hidden"
-                                    whileHover={{ y: -2 }}
-                                    transition={{ type: "spring", stiffness: 400 }}
-                                >
-                                    <span className="whitespace-nowrap">{link.name}</span>
-                                    {/* RGB Hover Line - Left to Right */}
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-red-500 via-green-500 to-blue-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
-                                </motion.a>
+                                <li key={link.name}>
+                                    <a
+                                        href={link.href}
+                                        onClick={(e) => handleNavigation(e, link.href, link.id)}
+                                        className={`flex items-center gap-2 cursor-pointer transition-colors duration-300 ${
+                                            activeSection === link.id 
+                                                ? 'text-[#e1c693]'
+                                                : (isDark ? 'text-gray-400 hover:text-[#e1c693]' : 'text-gray-600 hover:text-[#a78b54]')
+                                        }`}
+                                    >
+                                        {link.icon} {link.name}
+                                    </a>
+                                </li>
                             ))}
-                        </div>
+                        </ul>
 
-                        {/* Desktop Right Side */}
-                        <div className="hidden lg:flex items-center gap-4">
-                            <motion.a
-                                href="#contact"
-                                className="px-6 py-2.5 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl whitespace-nowrap relative overflow-hidden"
-                                style={{
-                                    background: "linear-gradient(90deg, #ff0055, #00ffaa, #0066ff, #ff00aa, #ff0055)",
-                                    backgroundSize: "300% 100%",
-                                }}
-                                animate={{
-                                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                                }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                whileHover={{
-                                    y: -3,
-                                    scale: 1.05,
-                                    boxShadow: "0 12px 40px -8px rgba(255, 0, 85, 0.6)"
-                                }}
-                                whileTap={{ scale: 0.95 }}
+                        {/* Right Side: Theme Toggle Button */}
+                        <div className="flex items-center flex-shrink-0 cursor-pointer z-10 gap-3">
+                            <button
+                                onClick={handleThemeToggle}
+                                className={`p-2 rounded-md transition-colors duration-300 ${isDark ? 'hover:bg-white/10 text-[#e1c693]' : 'hover:bg-gray-100 text-[#a78b54]'}`}
+                                aria-label="Toggle Theme"
                             >
-                                Let&apos;s Talk
-                            </motion.a>
+                                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                            </button>
 
-                            <motion.a
-                                href="#login"
-                                className="px-6 py-2.5 border border-orange-500/50 text-orange-400 text-sm font-semibold rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 hover:border-orange-500 whitespace-nowrap"
-                                whileHover={{
-                                    y: -2,
-                                    backgroundColor: "rgba(249, 115, 22, 1)",
-                                    color: "#ffffff",
-                                }}
-                                whileTap={{ scale: 0.95 }}
+                            {/* Mobile Menu Button */}
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className={`md:hidden p-2 rounded-md transition-colors ${isDark ? 'text-gray-300 hover:bg-white/5' : 'text-gray-800 hover:bg-gray-100'}`}
                             >
-                                LOGIN
-                            </motion.a>
+                                {isMenuOpen ? <Icons.X /> : <Icons.Menu />}
+                            </button>
                         </div>
-
-                        {/* Mobile Menu Button */}
-                        <motion.button
-                            className="lg:hidden relative z-50 w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300"
-                            onClick={() => setIsOpen(!isOpen)}
-                            aria-label="Toggle Menu"
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <div className="relative w-6 h-5 flex flex-col justify-between">
-                                <motion.span
-                                    className="w-6 h-0.5 bg-white rounded-full origin-left"
-                                    variants={topLineVariants}
-                                    animate={isOpen ? "open" : "closed"}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                />
-                                <motion.span
-                                    className="w-6 h-0.5 bg-white rounded-full"
-                                    variants={middleLineVariants}
-                                    animate={isOpen ? "open" : "closed"}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                />
-                                <motion.span
-                                    className="w-6 h-0.5 bg-white rounded-full origin-left"
-                                    variants={bottomLineVariants}
-                                    animate={isOpen ? "open" : "closed"}
-                                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                                />
-                            </div>
-                        </motion.button>
                     </div>
                 </div>
-            </motion.nav>
 
-            {/* Mobile Menu Overlay */}
+                {/* Mobile Menu Dropdown */}
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className={`md:hidden absolute left-4 right-4 mt-2 border rounded-lg shadow-2xl py-6 px-6 z-50 backdrop-blur-xl ${isDark ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-gray-200'}`}
+                        >
+                            <ul className={`flex flex-col gap-2 text-lg font-medium ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>
+                                {navLinks.map((link, i) => (
+                                    <motion.li
+                                        key={i}
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: i * 0.05 }}
+                                        className={`py-3 px-4 hover:bg-[#e1c693]/10 rounded-md cursor-pointer transition-colors ${
+                                            activeSection === link.id ? 'bg-[#e1c693]/10 text-[#e1c693]' : ''
+                                        }`}
+                                    >
+                                        <a 
+                                            href={link.href} 
+                                            onClick={(e) => handleNavigation(e, link.href, link.id)}
+                                            className="flex items-center gap-4"
+                                        >
+                                            {link.icon} {link.name}
+                                        </a>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </nav>
+
+            {/* ==================== THEME POPUP MODAL ==================== */}
             <AnimatePresence>
-                {isOpen && (
+                {showThemePopup && (
                     <>
                         {/* Backdrop */}
                         <motion.div
-                            className="fixed inset-0 z-40 lg:hidden bg-black/80 backdrop-blur-xl"
-                            variants={backdropVariants}
-                            initial="closed"
-                            animate="open"
-                            exit="closed"
-                            onClick={() => setIsOpen(false)}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowThemePopup(false)}
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] cursor-pointer"
                         />
-
-                        {/* Menu Panel - Right to Left Slide */}
-                        <motion.div
-                            className="fixed top-0 right-0 h-full w-full max-w-sm bg-[#0f0f0f] border-l border-white/10 shadow-2xl z-40 lg:hidden"
-                            variants={menuVariants}
-                            initial="closed"
-                            animate="open"
-                            exit="closed"
-                        >
-                            <div className="flex flex-col h-full pt-28 pb-8 px-8">
-                                {/* Navigation Links with Stagger Animation */}
-                                <motion.div
-                                    className="flex flex-col gap-2"
-                                    variants={menuVariants}
+                        
+                        {/* Popup Content */}
+                        <div className="fixed inset-0 flex items-center justify-center z-[101] pointer-events-none">
+                            <motion.div
+                                variants={popupVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                onClick={(e) => e.stopPropagation()}
+                                className={`pointer-events-auto max-w-md mx-4 p-6 md:p-8 rounded-2xl border shadow-2xl ${
+                                    isDark 
+                                        ? 'bg-[#0a0a0a] border-[#e1c693]/30 text-gray-200' 
+                                        : 'bg-white border-[#a78b54]/30 text-gray-900'
+                                }`}
+                            >
+                                {/* Close Button */}
+                                <button
+                                    onClick={() => setShowThemePopup(false)}
+                                    className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${
+                                        isDark ? 'hover:bg-white/10 text-gray-400 hover:text-[#e1c693]' : 'hover:bg-gray-100 text-gray-500 hover:text-[#a78b54]'
+                                    }`}
                                 >
-                                    {navLinks.map((link, index) => (
-                                        <motion.a
-                                            key={link.name}
-                                            href={link.href}
-                                            onClick={() => setIsOpen(false)}
-                                            className="group flex items-center justify-between py-4 px-4 rounded-xl text-lg font-medium text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300 overflow-hidden"
-                                            variants={linkVariants}
-                                            whileHover={{
-                                                x: 10,
-                                                backgroundColor: "rgba(255,255,255,0.05)",
-                                            }}
-                                            whileTap={{ scale: 0.98 }}
-                                        >
-                                            <span className="relative whitespace-nowrap">
-                                                {link.name}
-                                                {/* Mobile RGB Hover Line */}
-                                                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-red-500 via-green-500 to-blue-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
-                                            </span>
-                                            <motion.span
-                                                className="text-orange-500 text-sm"
-                                                initial={{ opacity: 0, x: -10 }}
-                                                whileHover={{ opacity: 1, x: 0 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                →
-                                            </motion.span>
-                                        </motion.a>
-                                    ))}
-                                </motion.div>
+                                    <X className="w-5 h-5" />
+                                </button>
 
-                                {/* Mobile Bottom Section */}
-                                <motion.div
-                                    className="mt-auto pt-8 border-t border-white/10"
-                                    variants={bottomSectionVariants}
-                                    initial="closed"
-                                    animate="open"
-                                    exit="closed"
-                                >
-                                    <motion.a
-                                        href="tel:+18774768927"
-                                        className="flex items-center gap-3 text-white/60 hover:text-white transition-colors mb-6"
-                                        whileHover={{ x: 5 }}
-                                    >
-                                        <motion.div
-                                            className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center"
-                                            whileHover={{
-                                                scale: 1.1,
-                                                backgroundColor: "rgba(249, 115, 22, 0.3)",
-                                            }}
-                                        >
-                                            <Phone className="w-4 h-4 text-orange-500" />
-                                        </motion.div>
-                                        <span className="text-sm font-medium whitespace-nowrap">
-                                            +1-(877) 476-8927
-                                        </span>
-                                    </motion.a>
-
-                                    <div className="flex flex-col gap-3">
-                                        <motion.a
-                                            href="#contact"
-                                            onClick={() => setIsOpen(false)}
-                                            className="w-full py-3.5 bg-linear-to-r from-orange-500 to-orange-600 text-white text-center font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/20 whitespace-nowrap"
-                                            whileHover={{
-                                                scale: 1.02,
-                                                boxShadow:
-                                                    "0 10px 40px -10px rgba(249, 115, 22, 0.5)",
-                                            }}
-                                            whileTap={{ scale: 0.98 }}
-                                        >
-                                            Let&apos;s Talk
-                                        </motion.a>
-                                        <motion.a
-                                            href="#login"
-                                            onClick={() => setIsOpen(false)}
-                                            className="w-full py-3.5 border border-orange-500/30 text-orange-400 text-center font-semibold rounded-xl hover:bg-orange-500/10 transition-all duration-300 whitespace-nowrap"
-                                            whileHover={{
-                                                scale: 1.02,
-                                                backgroundColor: "rgba(249, 115, 22, 0.1)",
-                                            }}
-                                            whileTap={{ scale: 0.98 }}
-                                        >
-                                            LOGIN
-                                        </motion.a>
+                                {/* Icon */}
+                                <div className="flex justify-center mb-4">
+                                    <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                                        isDark ? 'bg-[#e1c693]/10 text-[#e1c693]' : 'bg-[#a78b54]/10 text-[#a78b54]'
+                                    }`}>
+                                        <Info className="w-8 h-8" />
                                     </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
+                                </div>
+
+                                {/* Title */}
+                                <h3 className={`text-xl font-bold text-center mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                    Theme Toggle Notice
+                                </h3>
+
+                                {/* Message */}
+                                <p className={`text-sm md:text-base text-center leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    The dark and light mode functionality has been implemented <span className="font-semibold text-[#e1c693]">for testing purposes only</span> on the <span className="font-semibold text-[#e1c693]">hero section</span>. Full theme support across all sections will be added in future updates.
+                                </p>
+
+                                {/* Action Button */}
+                                <div className="mt-6 flex justify-center">
+                                    <button
+                                        onClick={() => setShowThemePopup(false)}
+                                        className="px-6 py-2.5 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-[#0a0a0a] font-semibold rounded-full hover:shadow-lg hover:shadow-[#e1c693]/30 transition-all duration-300"
+                                    >
+                                        Got it!
+                                    </button>
+                                </div>
+
+                                {/* Decorative Bottom Line */}
+                                <div className={`mt-6 h-px w-full ${isDark ? 'bg-gradient-to-r from-transparent via-[#e1c693]/30 to-transparent' : 'bg-gradient-to-r from-transparent via-[#a78b54]/30 to-transparent'}`} />
+                            </motion.div>
+                        </div>
                     </>
                 )}
             </AnimatePresence>
+            {/* ==================== END THEME POPUP ==================== */}
 
-            {/* ===== GLOBAL CSS FOR RGB ANIMATION ===== */}
-            <style jsx global>{`
-        @keyframes rgb-gradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
+            {/* Spacer */}
+            <div className="pt-24 md:pt-28">
 
-        .animate-rgb-gradient {
-          background: linear-gradient(
-            -45deg,
-            #ee7752,
-            #e73c7e,
-            #23a6d5,
-            #23d5ab,
-            #ff0000,
-            #00ff00,
-            #0000ff,
-            #ee7752
-          );
-          background-size: 400% 400%;
-          animation: rgb-gradient 6s ease infinite;
-        }
-      `}</style>
-        </>
+                {/* 2. Utility Top Bar */}
+                <div className={`hidden lg:flex justify-between items-center px-12 py-2.5 backdrop-blur-md text-xs uppercase tracking-widest border-b relative z-40 ${isDark ? 'bg-[#050505]/50 border-white/5 text-gray-500' : 'bg-white/50 border-gray-200 text-gray-500'}`}>
+                    <div className="flex gap-8">
+                        <span className="flex items-center gap-2 hover:text-[#e1c693] cursor-pointer transition-colors"><Icons.Phone /> +1-(877) 476-8827</span>
+                        <span className="flex items-center gap-2 hover:text-[#e1c693] cursor-pointer transition-colors"><Icons.Contact /> info@AM-Verify.com</span>
+                    </div>
+                    <div>New York, USA</div>
+                </div>
+
+                {/* 3. Logo Banner with Reflection Effect */}
+                <div className="w-full flex justify-center mt-4 md:mt-6 relative z-30 px-4">
+                    <div className={`shadow-md px-8 md:px-16 py-3 rounded-t-xl border relative overflow-hidden ${isDark ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-gray-100'}`}>
+                        
+                        {/* Infinite Reflection/Shine Sweep Effect */}
+                        <motion.div
+                            className="absolute inset-0 z-10 pointer-events-none"
+                            style={{
+                                background: `linear-gradient(105deg, transparent 40%, ${isDark ? 'rgba(225, 198, 147, 0.15)' : 'rgba(225, 198, 147, 0.3)'} 45%, ${isDark ? 'rgba(225, 198, 147, 0.3)' : 'rgba(225, 198, 147, 0.5)'} 50%, ${isDark ? 'rgba(225, 198, 147, 0.15)' : 'rgba(225, 198, 147, 0.3)'} 55%, transparent 60%)`
+                            }}
+                            initial={{ x: '-100%', skewX: '-15deg' }}
+                            animate={{ x: '200%' }}
+                            transition={{
+                                duration: 1.2,
+                                ease: "easeInOut",
+                                repeat: Infinity,
+                                repeatDelay: 1.8,
+                            }}
+                        />
+
+                        <h2 className="relative z-20 text-xl md:text-3xl font-light tracking-[0.2em] md:tracking-[0.4em] text-gray-500">
+                            THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54] font-bold">VERIFY</span> PLATFORM
+                        </h2>
+                    </div>
+                </div>
+
+                {/* 4. MODERN HERO SECTION */}
+                <main id="home" className="relative max-w-7xl mx-auto mt-10 md:mt-16 px-6 md:px-12 lg:px-20 z-20 pb-16">
+                    <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+                        {/* Left Content */}
+                        <motion.div
+                            variants={fadeInLeft}
+                            initial="hidden"
+                            animate="visible"
+                            className="lg:w-1/2 space-y-8 py-10 md:py-20 text-center lg:text-left"
+                        >
+                            <h1 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                BRAND.<br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">DESIGN</span><br />
+                                PRODUCT.<br />
+                                <span style={{ fontFamily: "'Playfair Display', serif" }} className={`italic text-4xl sm:text-5xl md:text-6xl lg:text-7xl ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Development</span><br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">& MORE</span>
+                            </h1>
+
+                            <div className="space-y-4 max-w-lg mx-auto lg:mx-0">
+                                <p className={`text-lg md:text-xl leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Responsive Web Design Company Bringing Impactful Digital Strategies!
+                                </p>
+                                <p className="text-[#e1c693] text-xs md:text-sm font-bold uppercase tracking-[0.3em]">Data-Driven • Creative Excellence</p>
+                            </div>
+                        </motion.div>
+
+                        {/* Right Side Image */}
+                        <div className="lg:w-1/2 w-full min-h-[500px] md:min-h-[700px] relative">
+                            <motion.div
+                                variants={fadeInRight}
+                                initial="hidden"
+                                animate="visible"
+                                className="w-full h-full absolute inset-0 overflow-hidden border border-transparent hover:border-[#e1c693]/30 transition-all duration-700 shadow-2xl shadow-black/50"
+                                style={{ borderRadius: '12% 12% 12% 50%' }}
+                            >
+                                <img
+                                    src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop"
+                                    alt="Creative Design"
+                                    className="w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-110 transition-all duration-1000"
+                                />
+                                <div className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent ${isDark ? 'from-[#050505]' : 'from-[#f5f5f7]'}`}></div>
+                                <div className="absolute inset-0 bg-[#e1c693]/10 mix-blend-overlay pointer-events-none"></div>
+                            </motion.div>
+                        </div>
+
+                    </div>
+                </main>
+
+                {/* 5. ACHIEVEMENTS SECTION */}
+                <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20 z-20 py-20">
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h3 className="text-xs md:text-sm font-bold uppercase tracking-[0.5em] text-[#e1c693]">Trusted & Recognized By</h3>
+                        <p className={`text-xs mt-2 uppercase tracking-[0.3em] ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Achievements & Certifications</p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 md:gap-8">
+                        {achievements.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 50, rotateX: 45 }}
+                                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                                whileHover={{ scale: 1.08, rotateY: 10, boxShadow: "0px 25px 50px rgba(225, 198, 147, 0.2)" }}
+                                transition={{ duration: 0.6, delay: index * 0.15, type: "spring", stiffness: 100 }}
+                                viewport={{ once: true }}
+                                className={`group relative flex flex-col items-center justify-center p-6 md:p-8 rounded-xl border backdrop-blur-lg cursor-pointer transition-colors duration-300 ${isDark ? 'bg-white/[0.02] border-white/5 hover:border-[#e1c693]/40' : 'bg-white border-gray-100 hover:border-[#e1c693]/40 shadow-sm'}`}
+                                style={{ perspective: 1000 }}
+                            >
+                                <div className={`relative w-20 h-20 rounded-full border flex items-center justify-center mb-5 transition-all duration-300 ${isDark ? 'bg-white/5 border-white/10 group-hover:border-[#e1c693] text-gray-600' : 'bg-gray-50 border-gray-200 group-hover:border-[#e1c693] text-gray-400'} group-hover:text-[#e1c693]`}>
+                                    {item.icon}
+                                    <motion.div
+                                        animate={{ y: [0, -6, 0], opacity: [0.5, 1, 0.5] }}
+                                        transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#e1c693] rounded-full shadow-[0_0_10px_#e1c693]"
+                                    ></motion.div>
+                                </div>
+
+                                <h4 className={`text-sm font-bold leading-tight text-center ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>{item.title}</h4>
+                                <p className={`text-[10px] font-medium mt-1 uppercase tracking-wider text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Floating Action Buttons with Hover Labels */}
+            <div className="fixed left-4 md:left-8 bottom-6 md:bottom-10 flex flex-col gap-3 md:gap-4 z-50">
+
+                <div className="group relative">
+                    <div className="p-3 md:p-4 bg-[#e1c693] rounded-lg text-white shadow-xl cursor-pointer hover:bg-[#a78b54] transition-colors flex items-center justify-center">
+                        <Icons.Phone />
+                    </div>
+                    <div className="absolute left-full bottom-1/2 translate-y-1/2 ml-3 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 pointer-events-none">
+                        <div className={`${isDark ? 'bg-gray-900 border-[#e1c693]/30 text-[#e1c693]' : 'bg-[#1a1a1a] border-[#e1c693]/40 text-[#e1c693]'} text-xs font-bold px-3 py-2 rounded-md shadow-lg whitespace-nowrap border`}>
+                            +1-(877) 476-8827
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="group relative">
+                    <div className={`p-3 md:p-4 border rounded-lg shadow-xl cursor-pointer transition-colors flex items-center justify-center ${isDark ? 'bg-[#0a0a0a] border-[#e1c693] text-[#e1c693] hover:bg-[#e1c693]/10' : 'bg-[#1a1a1a] border-[#e1c693] text-[#e1c693] hover:bg-[#e1c693]/20'}`}>
+                        <Icons.Contact />
+                    </div>
+                    <div className="absolute left-full bottom-1/2 translate-y-1/2 ml-3 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 pointer-events-none">
+                        <div className={`${isDark ? 'bg-gray-900 border-[#e1c693]/30 text-[#e1c693]' : 'bg-[#1a1a1a] border-[#e1c693]/40 text-[#e1c693]'} text-xs font-bold px-3 py-2 rounded-md shadow-lg whitespace-nowrap border`}>
+                            info@AM-Verify.com
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     );
-}
+};
+
+export default LandingPage;
