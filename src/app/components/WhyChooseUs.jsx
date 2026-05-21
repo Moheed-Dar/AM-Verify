@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useTheme } from "next-themes";
 import {
-  Brain,
   User,
   Handshake,
   Globe,
@@ -15,7 +14,15 @@ import {
 export default function WhyChooseUs() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -62,21 +69,48 @@ export default function WhyChooseUs() {
     },
   ];
 
+  // Don't render theme-dependent styles until mounted
+  if (!mounted) {
+    return (
+      <section
+        ref={ref}
+        id="about"
+        className="relative overflow-hidden py-20 md:py-28 transition-colors duration-500 bg-[#050505]"
+      >
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16 md:mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#e1c693]/30 rounded-full bg-[#e1c693]/5 mb-6 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-[#e1c693]" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Why Choose Us</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+              Building Websites <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
+                For Years
+              </span>
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={ref}
       id="about"
       className={`relative overflow-hidden py-20 md:py-28 transition-colors duration-500
-        ${theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"}`}
+        ${isDark ? "bg-[#050505]" : "bg-[#f8f9fa]"}`}
+      suppressHydrationWarning
     >
       {/* Background Grid — color toggles with theme */}
-      <div className="absolute inset-0 opacity-[0.04]">
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
-              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
+              linear-gradient(${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -84,7 +118,9 @@ export default function WhyChooseUs() {
       </div>
 
       {/* Ambient Golden Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#e1c693]/5 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px] pointer-events-none ${
+        isDark ? "bg-[#e1c693]/5" : "bg-[#e1c693]/10"
+      }`} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
 
@@ -99,13 +135,17 @@ export default function WhyChooseUs() {
             <Sparkles className="w-4 h-4 text-[#e1c693]" />
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Why Choose Us</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+          <h2 className={`text-4xl md:text-5xl lg:text-6xl font-black leading-tight ${
+            isDark ? "text-white" : "text-gray-900"
+          }`}>
             Building Websites <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               For Years
             </span>
           </h2>
-          <p className="mt-6 text-gray-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className={`mt-6 text-base md:text-lg max-w-2xl mx-auto leading-relaxed ${
+            isDark ? "text-gray-400" : "text-gray-600"
+          }`}>
             We can turn brilliant ideas into working realities for you! Using industry-wide experience, we push our limits to deliver stunning websites aligned with your brand identity. Our AI-automated CRM streamlines every client interaction. Effortlessly manage calls, texts, and emails from one centralized platform, enhancing communication, boosting efficiency, and delivering a seamless customer experience.
           </p>
         </motion.div>
@@ -121,21 +161,33 @@ export default function WhyChooseUs() {
           {/* Card 1: Large Image Card (Spans 2 cols on Desktop) */}
           <motion.div
             variants={itemVariants}
-            className="md:col-span-2 relative rounded-3xl overflow-hidden group border border-white/5 hover:border-[#e1c693]/30 transition-all duration-700 min-h-[380px] md:min-h-[420px]"
+            className={`md:col-span-2 relative rounded-3xl overflow-hidden group transition-all duration-700 min-h-[380px] md:min-h-[420px] ${
+              isDark 
+                ? "border border-white/5 hover:border-[#e1c693]/30" 
+                : "border border-gray-200 hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
+            }`}
           >
             <img
               src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
               alt="Team Collaboration"
               className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent z-10"></div>
+            <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+              isDark 
+                ? "from-[#050505] via-[#050505]/60 to-transparent" 
+                : "from-[#f8f9fa] via-[#f8f9fa]/60 to-transparent"
+            }`}></div>
             <div className="absolute inset-0 bg-[#e1c693]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
 
             <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              <h3 className={`text-2xl md:text-3xl font-bold mb-3 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}>
                 Delivering Custom <span className="text-[#e1c693]">Website Solutions</span>
               </h3>
-              <p className="text-gray-300 text-sm md:text-base max-w-lg leading-relaxed">
+              <p className={`text-sm md:text-base max-w-lg leading-relaxed ${
+                isDark ? "text-gray-300" : "text-gray-600"
+              }`}>
                 Expand your business reach and create modern digital experiences with our expert team.
               </p>
               <motion.div
@@ -151,19 +203,31 @@ export default function WhyChooseUs() {
           {/* Card 2: Medium Image Card */}
           <motion.div
             variants={itemVariants}
-            className="relative rounded-3xl overflow-hidden group border border-white/5 hover:border-[#e1c693]/30 transition-all duration-700 min-h-[380px] md:min-h-[420px]"
+            className={`relative rounded-3xl overflow-hidden group transition-all duration-700 min-h-[380px] md:min-h-[420px] ${
+              isDark 
+                ? "border border-white/5 hover:border-[#e1c693]/30" 
+                : "border border-gray-200 hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
+            }`}
           >
             <img
               src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop"
               alt="Core Strategy"
               className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-[#050505]/20 z-10"></div>
+            <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+              isDark 
+                ? "from-[#050505] via-[#050505]/70 to-[#050505]/20" 
+                : "from-[#f8f9fa] via-[#f8f9fa]/70 to-[#f8f9fa]/20"
+            }`}></div>
             <div className="absolute inset-0 bg-[#e1c693]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
 
             <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-              <h4 className="text-white font-bold text-2xl mb-2">Core Discernments</h4>
-              <p className="text-gray-400 text-sm leading-relaxed">Strategic approach to design and innovation for your business.</p>
+              <h4 className={`font-bold text-2xl mb-2 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}>Core Discernments</h4>
+              <p className={`text-sm leading-relaxed ${
+                isDark ? "text-gray-400" : "text-gray-600"
+              }`}>Strategic approach to design and innovation for your business.</p>
             </div>
           </motion.div>
 
@@ -172,7 +236,11 @@ export default function WhyChooseUs() {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="relative rounded-3xl overflow-hidden group border border-white/5 hover:border-[#e1c693]/40 transition-all duration-700 cursor-pointer min-h-[380px] md:min-h-[420px]"
+              className={`relative rounded-3xl overflow-hidden group transition-all duration-700 cursor-pointer min-h-[380px] md:min-h-[420px] ${
+                isDark 
+                  ? "border border-white/5 hover:border-[#e1c693]/40" 
+                  : "border border-gray-200 hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
+              }`}
               whileHover={{ y: -5 }}
             >
               <img
@@ -180,22 +248,42 @@ export default function WhyChooseUs() {
                 alt={feature.title}
                 className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-[#050505]/40 z-10"></div>
+              <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+                isDark 
+                  ? "from-[#050505] via-[#050505]/80 to-[#050505]/40" 
+                  : "from-[#f8f9fa] via-[#f8f9fa]/80 to-[#f8f9fa]/40"
+              }`}></div>
               <div className="absolute inset-0 bg-[#e1c693]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
 
               <div className="relative z-20 flex flex-col justify-between h-full p-8">
-                <div className="w-14 h-14 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-[#e1c693]/20 group-hover:border-[#e1c693]/40 transition-all duration-500">
-                  <feature.icon className="w-7 h-7 text-white group-hover:text-[#e1c693] transition-colors duration-500" />
+                <div className={`w-14 h-14 rounded-xl backdrop-blur-md border flex items-center justify-center transition-all duration-500 ${
+                  isDark 
+                    ? "bg-white/10 border-white/20 group-hover:bg-[#e1c693]/20 group-hover:border-[#e1c693]/40" 
+                    : "bg-black/5 border-gray-300 group-hover:bg-[#e1c693]/20 group-hover:border-[#e1c693]/40"
+                }`}>
+                  <feature.icon className={`w-7 h-7 transition-colors duration-500 ${
+                    isDark 
+                      ? "text-white group-hover:text-[#e1c693]" 
+                      : "text-gray-700 group-hover:text-[#e1c693]"
+                  }`} />
                 </div>
 
                 <div>
-                  <h4 className="text-white font-bold text-lg mb-2 tracking-wide">
+                  <h4 className={`font-bold text-lg mb-2 tracking-wide ${
+                    isDark ? "text-white" : "text-gray-900"
+                  }`}>
                     {feature.title}
                   </h4>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                  <p className={`text-sm leading-relaxed mb-6 ${
+                    isDark ? "text-gray-400" : "text-gray-600"
+                  }`}>
                     {feature.description}
                   </p>
-                  <div className="w-10 h-10 rounded-full border border-white/20 backdrop-blur-sm flex items-center justify-center group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-400 transition-all duration-500">
+                  <div className={`w-10 h-10 rounded-full backdrop-blur-sm border flex items-center justify-center transition-all duration-500 ${
+                    isDark 
+                      ? "border-white/20 group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-400" 
+                      : "border-gray-300 group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-500"
+                  }`}>
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
