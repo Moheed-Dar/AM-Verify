@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import {
@@ -54,14 +54,47 @@ const services = [
 
 export default function Services() {
   const [activeService, setActiveService] = useState(0);
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
+
+  // Don't render theme-dependent styles until mounted
+  if (!mounted) {
+    return (
+      <section
+        id="services"
+        className="relative overflow-hidden py-20 md:py-24 transition-colors duration-500 bg-[#050505]"
+      >
+        <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-12 lg:px-16">
+          <div className="mb-12 md:mb-16">
+            <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-[0.2em] text-[#e1c693] uppercase bg-[#e1c693]/5 rounded-full border border-[#e1c693]/20 backdrop-blur-sm">
+              What We Do
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white">
+              Services We{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
+                Offer
+              </span>
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       id="services"
       className={`relative overflow-hidden py-20 md:py-24 transition-colors duration-500 ${
-        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+        isDark ? "bg-[#050505]" : "bg-[#f8f9fa]"
       }`}
+      suppressHydrationWarning
     >
       {/* Background Ambient Lights */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
@@ -70,8 +103,8 @@ export default function Services() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
-              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
+              linear-gradient(${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -93,7 +126,7 @@ export default function Services() {
             What We Do
           </span>
           <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight transition-colors duration-500 ${
-            theme === "dark" ? "text-white" : "text-gray-900"
+            isDark ? "text-white" : "text-gray-900"
           }`}>
             Services We{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
@@ -107,7 +140,7 @@ export default function Services() {
           
           {/* Left Side: Service List - Reduced Padding & Sizes */}
           <div className={`w-full lg:w-1/2 flex flex-col divide-y transition-colors duration-500 ${
-            theme === "dark" ? "divide-white/5" : "divide-gray-200"
+            isDark ? "divide-white/5" : "divide-gray-200"
           }`}>
             {services.map((service, index) => {
               const Icon = service.icon;
@@ -121,7 +154,7 @@ export default function Services() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   onMouseEnter={() => setActiveService(index)}
-                  onClick={() => setActiveService(index)} // For mobile tap
+                  onClick={() => setActiveService(index)}
                   className={`group relative flex items-center justify-between py-4 cursor-pointer transition-all duration-500 ${
                     isActive ? "pl-5" : "pl-0 opacity-60 hover:opacity-100 hover:pl-3"
                   }`}
@@ -138,7 +171,7 @@ export default function Services() {
                   <div className="flex items-center gap-4">
                     {/* Number */}
                     <span className={`text-xs font-bold transition-colors duration-300 ${
-                      isActive ? 'text-[#e1c693]' : theme === "dark" ? 'text-gray-700' : 'text-gray-400'
+                      isActive ? 'text-[#e1c693]' : isDark ? 'text-gray-700' : 'text-gray-400'
                     }`}>
                       0{index + 1}
                     </span>
@@ -147,7 +180,7 @@ export default function Services() {
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-500 ${
                       isActive 
                         ? "bg-[#e1c693]/10 border-[#e1c693]/40 text-[#e1c693]" 
-                        : theme === "dark" 
+                        : isDark 
                           ? "bg-white/5 border-white/10 text-gray-500 group-hover:border-white/30 group-hover:text-gray-300"
                           : "bg-gray-100 border-gray-200 text-gray-500 group-hover:border-gray-400 group-hover:text-gray-700"
                     }`}>
@@ -157,8 +190,8 @@ export default function Services() {
                     {/* Title - Reduced size */}
                     <h3 className={`text-lg md:text-xl font-semibold transition-colors duration-300 ${
                       isActive 
-                        ? theme === "dark" ? "text-white" : "text-gray-900"
-                        : theme === "dark" ? "text-gray-400 group-hover:text-white" : "text-gray-500 group-hover:text-gray-900"
+                        ? isDark ? "text-white" : "text-gray-900"
+                        : isDark ? "text-gray-400 group-hover:text-white" : "text-gray-500 group-hover:text-gray-900"
                     }`}>
                       {service.title}
                     </h3>
@@ -168,7 +201,13 @@ export default function Services() {
                   <motion.div
                     animate={{ x: isActive ? 0 : -10, opacity: isActive ? 1 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className="w-8 h-8 rounded-full bg-[#e1c693]/10 border border-[#e1c693]/30 flex items-center justify-center text-[#e1c693]"
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                      isActive 
+                        ? "bg-[#e1c693]/10 border border-[#e1c693]/30 text-[#e1c693]" 
+                        : isDark
+                          ? "bg-white/5 border border-white/10 text-gray-500"
+                          : "bg-gray-100 border border-gray-200 text-gray-400"
+                    }`}
                   >
                     <ArrowRight className="w-4 h-4" />
                   </motion.div>
@@ -179,7 +218,9 @@ export default function Services() {
 
           {/* Right Side: Dynamic Image Showcase - Reduced Height */}
           <div className="hidden lg:block w-1/2 relative">
-            <div className="sticky top-28 h-[450px] w-full rounded-2xl overflow-hidden border border-white/5 shadow-2xl shadow-black/50">
+            <div className={`sticky top-28 h-[450px] w-full rounded-2xl overflow-hidden shadow-2xl ${
+              isDark ? "border border-white/5 shadow-black/50" : "border border-gray-200 shadow-gray-300/30"
+            }`}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeService}
@@ -196,20 +237,28 @@ export default function Services() {
                   />
                   
                   {/* Heavy Gradient Overlay for Text */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                  <div className="absolute inset-0 bg-[#e1c693]/10 mix-blend-overlay"></div>
+                  <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+                    isDark 
+                      ? "from-[#050505] via-[#050505]/40 to-transparent" 
+                      : "from-[#f8f9fa] via-[#f8f9fa]/40 to-transparent"
+                  }`}></div>
+                  <div className="absolute inset-0 bg-[#e1c693]/10 mix-blend-overlay z-10"></div>
 
                   {/* Floating Content on Image */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
                     <motion.div
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: 0.2, duration: 0.5 }}
                     >
-                      <h4 className="text-2xl font-black text-white mb-2 drop-shadow-lg">
+                      <h4 className={`text-2xl font-black mb-2 drop-shadow-lg ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}>
                         {services[activeService].title}
                       </h4>
-                      <p className="text-gray-300 text-sm leading-relaxed max-w-sm drop-shadow-md">
+                      <p className={`text-sm leading-relaxed max-w-sm drop-shadow-md ${
+                        isDark ? "text-gray-300" : "text-gray-700"
+                      }`}>
                         {services[activeService].description}
                       </p>
                     </motion.div>
@@ -228,26 +277,36 @@ export default function Services() {
                  animate={{ opacity: 1, y: 0 }}
                  exit={{ opacity: 0, y: -20 }}
                  transition={{ duration: 0.4 }}
-                 className="relative w-full h-[320px] rounded-2xl overflow-hidden border border-white/5"
+                 className={`relative w-full h-[320px] rounded-2xl overflow-hidden ${
+                  isDark ? "border border-white/5" : "border border-gray-200 shadow-sm"
+                }`}
                >
                  <img
                    src={services[activeService].image}
                    alt={services[activeService].title}
                    className="w-full h-full object-cover"
                  />
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent"></div>
+                 <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+                  isDark 
+                    ? "from-[#050505] via-[#050505]/50 to-transparent" 
+                    : "from-[#f8f9fa] via-[#f8f9fa]/50 to-transparent"
+                }`}></div>
                  
-                 <div className="absolute bottom-0 left-0 right-0 p-6">
+                 <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
                    <div className="w-8 h-8 rounded-lg bg-[#e1c693]/20 border border-[#e1c693]/40 flex items-center justify-center mb-3">
                      {(() => {
                        const Icon = services[activeService].icon;
                        return <Icon className="w-4 h-4 text-[#e1c693]" />;
                      })()}
                    </div>
-                   <h4 className="text-xl font-bold text-white mb-1">
+                   <h4 className={`text-xl font-bold mb-1 ${
+                    isDark ? "text-white" : "text-gray-900"
+                  }`}>
                      {services[activeService].title}
                    </h4>
-                   <p className="text-gray-400 text-sm leading-relaxed">
+                   <p className={`text-sm leading-relaxed ${
+                    isDark ? "text-gray-400" : "text-gray-600"
+                  }`}>
                      {services[activeService].description}
                    </p>
                  </div>

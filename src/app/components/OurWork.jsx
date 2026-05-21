@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useTheme } from "next-themes";
 import {
-  Eye,
   ExternalLink,
   Sparkles,
   ArrowRight,
@@ -20,9 +19,17 @@ import {
 export default function OurWork() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
 
   const tabs = [
     { id: "all", label: "All Projects", icon: Layers },
@@ -101,18 +108,49 @@ export default function OurWork() {
       ? projects
       : projects.filter((p) => p.category === activeTab);
 
+  // Don't render theme-dependent styles until mounted
+  if (!mounted) {
+    return (
+      <section
+        ref={ref}
+        id="work"
+        className="relative overflow-hidden py-20 md:py-28 transition-colors duration-500 bg-[#050505]"
+      >
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#e1c693]/30 rounded-full bg-[#e1c693]/5 mb-6 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-[#e1c693]" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Portfolio</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-white">
+              See Our{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
+                Work
+              </span>
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={ref}
       id="work"
       className={`relative overflow-hidden py-20 md:py-28 transition-colors duration-500 ${
-        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+        isDark ? "bg-[#050505]" : "bg-[#f8f9fa]"
       }`}
+      suppressHydrationWarning
     >
       {/* Ambient Lights */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#e1c693]/5 rounded-full blur-[150px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#e1c693]/3 rounded-full blur-[150px] pointer-events-none" />
+        <div className={`absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full blur-[150px] pointer-events-none ${
+          isDark ? "bg-[#e1c693]/5" : "bg-[#e1c693]/10"
+        }`} />
+        <div className={`absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[150px] pointer-events-none ${
+          isDark ? "bg-[#e1c693]/3" : "bg-[#e1c693]/8"
+        }`} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
@@ -128,7 +166,7 @@ export default function OurWork() {
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Portfolio</span>
           </div>
           <h2 className={`text-4xl md:text-5xl lg:text-6xl font-black mb-4 transition-colors duration-500 ${
-            theme === "dark" ? "text-white" : "text-gray-900"
+            isDark ? "text-white" : "text-gray-900"
           }`}>
             See Our{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
@@ -137,7 +175,7 @@ export default function OurWork() {
           </h2>
 
           <p className={`max-w-3xl mx-auto text-base md:text-lg leading-relaxed transition-colors duration-500 ${
-            theme === "dark" ? "text-gray-400" : "text-gray-600"
+            isDark ? "text-gray-400" : "text-gray-600"
           }`}>
             Our work is a testament to our expertise. It speaks aloud in respect of e-commerce, web and mobile application, SEO, and branding.
             Our dedicated team partners with high growth industries and established enterprises to turn services into measurable sales. We drive customer retention, strengthen brand trust, and accelerate acquisition, transforming operations into profitable growth engines.
@@ -150,7 +188,7 @@ export default function OurWork() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.5 }}
           className={`flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b pb-4 transition-colors duration-500 ${
-            theme === "dark" ? "border-white/10" : "border-gray-300"
+            isDark ? "border-white/10" : "border-gray-200"
           }`}
         >
           {tabs.map((tab) => (
@@ -160,7 +198,7 @@ export default function OurWork() {
               className={`relative flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
                 activeTab === tab.id
                   ? "text-[#e1c693]"
-                  : theme === "dark"
+                  : isDark
                   ? "text-gray-500 hover:text-gray-300"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -195,7 +233,11 @@ export default function OurWork() {
                 
                 {/* === FEATURED CARD DESIGN (The Big Card) === */}
                 {index === 0 ? (
-                  <div className="relative w-full h-full min-h-[450px] md:min-h-[600px] rounded-3xl overflow-hidden border border-white/5 hover:border-[#e1c693]/40 transition-all duration-700 flex flex-col md:flex-row">
+                  <div className={`relative w-full h-full min-h-[450px] md:min-h-[600px] rounded-3xl overflow-hidden transition-all duration-700 flex flex-col md:flex-row ${
+                    isDark 
+                      ? "border border-white/5 hover:border-[#e1c693]/40" 
+                      : "border border-gray-200 hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
+                  }`}>
                     
                     {/* Left: Image Section */}
                     <div className="md:w-1/2 h-64 md:h-full relative overflow-hidden">
@@ -261,7 +303,11 @@ export default function OurWork() {
                   </div>
                 ) : (
                 /* === NORMAL CARDS DESIGN === */
-                  <div className="relative w-full min-h-[350px] md:min-h-[450px] rounded-3xl overflow-hidden border border-white/5 hover:border-[#e1c693]/40 transition-all duration-700">
+                  <div className={`relative w-full min-h-[350px] md:min-h-[450px] rounded-3xl overflow-hidden transition-all duration-700 ${
+                    isDark 
+                      ? "border border-white/5 hover:border-[#e1c693]/40" 
+                      : "border border-gray-200 hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
+                  }`}>
                     
                     <img
                       src={project.image}
@@ -269,7 +315,11 @@ export default function OurWork() {
                       className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                     />
                     
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent z-10"></div>
+                    <div className={`absolute inset-0 bg-gradient-to-t z-10 ${
+                      isDark 
+                        ? "from-[#050505] via-[#050505]/60 to-transparent" 
+                        : "from-[#f8f9fa] via-[#f8f9fa]/60 to-transparent"
+                    }`}></div>
                     <div className="absolute inset-0 bg-[#e1c693]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
 
                     <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -284,7 +334,9 @@ export default function OurWork() {
                         {project.title}
                       </h3>
                       
-                      <p className="text-gray-400 text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 max-w-md">
+                      <p className={`text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 max-w-md ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}>
                         {project.description}
                       </p>
 
@@ -300,7 +352,11 @@ export default function OurWork() {
                           ))}
                         </div>
                         
-                        <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-400 transition-all duration-500">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${
+                          isDark 
+                            ? "border border-white/20 group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-400" 
+                            : "border border-gray-300 group-hover:border-[#e1c693] group-hover:text-[#e1c693] text-gray-500"
+                        }`}>
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
@@ -315,7 +371,7 @@ export default function OurWork() {
 
       </div>
 
-      {/* Project Modal */}
+      {/* Project Modal - Always Dark Themed (Looks Premium) */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div
