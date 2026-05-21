@@ -2,56 +2,58 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 import { ArrowLeft, ArrowRight, Quote, Sparkles } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Michael Jackson",
+    name: "- Anna Jenkins",
     role: "CEO Of Company",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face",
+    image: "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=375,fit=crop/nH1KtW4ZecVWmxO2/client_1-YbN5DPpnlMHbBOlN.png",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "I've used a handful of CRMs on the market, and found that most have a hard time syncing my various social media accounts real-time, leaving me missing important notifications sometimes for days. Flashteck CRM solution was a pleasant surprise! The team has really worked hard to ensure instant synchronization with most of the mainstream apps. Impressed! ",
   },
   {
-    name: "Parvez Hossein",
+    name: "- Danny Lores",
     role: "CEO Of Company",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face",
+    image: "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,h=375,fit=crop/nH1KtW4ZecVWmxO2/client_2-Y4LgEjNy3VikGNOb.png",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "I am a roofer who spends most of his time in the field, I like using Flashteck CRM services since it helps me organize my clients data and appointments into meaningful charts and tables. That's why I've been able to focus kore on the actual work rather than worrying about missing calls, text messages or emails. I  found it to be a great tool to increase productivity.",
   },
   {
-    name: "Shoikat Hasan",
-    role: "CEO Of Company",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&h=1000&fit=crop&crop=face",
+    name: "Marcus Thorne",
+    role: "Director of Operations",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=1000&fit=crop&crop=face",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "The analytics dashboard is a game-changer. Before Flashteck, we were flying blind with our lead data. Now, we can track every metric in real-time, identify bottlenecks, and optimize our sales funnel on the fly. It's incredibly intuitive and has boosted our conversion rates significantly.",
   },
   {
-    name: "Sarah Williams",
-    role: "Marketing Director",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=1000&fit=crop&crop=face",
+    name: "Elena Rostova",
+    role: "Customer Success Manager",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&fit=crop&crop=face",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "What sets Flashteck apart isn't just the software, but the onboarding experience. Their support team helped us migrate our entire database seamlessly. The automated follow-ups have saved my team hours of manual work every week, allowing us to focus on actually serving our clients.",
   },
   {
-    name: "David Chen",
-    role: "Tech Lead",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face",
+    name: "James Liang",
+    role: "E-commerce Founder",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&h=1000&fit=crop&crop=face",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "Running an online store means dealing with customer queries across multiple platforms. Flashteck unified our inbox across email, social, and WhatsApp. Response times dropped by 50%, and we never miss a sales lead. It’s exactly what a growing e-commerce business needs.",
   },
   {
-    name: "Emma Thompson",
-    role: "Product Manager",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&h=1000&fit=crop&crop=face",
+    name: "Sofia Martinez",
+    role: "Senior Real Estate Agent",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&h=1000&fit=crop&crop=face",
     rating: 5,
-    text: "Lorem Ipsum is simply dummy text of the Printing industry Lorem Ipsum has been industry's standard dummy text ever since the 1500s when an unknown printer took a galley.",
+    text: "In real estate, timing is everything. Being able to manage calls, texts, and emails from one app while out in the field is invaluable. Flashteck’s mobile-friendly CRM ensures I never miss a follow-up with a potential buyer. It’s completely transformed how I manage my property listings.",
   },
 ];
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -76,7 +78,11 @@ export default function Testimonials() {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="relative bg-[#050505] py-16 md:py-24 overflow-hidden">
+    <section
+      className={`relative overflow-hidden py-16 md:py-24 transition-colors duration-500 ${
+        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+      }`}
+    >
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
       
@@ -94,7 +100,9 @@ export default function Testimonials() {
             <Sparkles className="w-4 h-4 text-[#e1c693]" />
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Testimonials</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight transition-colors duration-500 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
+          }`}>
             What Our <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               Clients Say
@@ -122,7 +130,9 @@ export default function Testimonials() {
 
                 {/* Testimonial Text - Tighter Margins */}
                 <p 
-                  className="text-lg md:text-xl font-light text-gray-200 leading-relaxed mb-6 tracking-tight"
+                  className={`text-lg md:text-xl font-light leading-relaxed mb-6 tracking-tight transition-colors duration-500 ${
+                    theme === "dark" ? "text-gray-200" : "text-gray-800"
+                  }`}
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {currentTestimonial.text}
@@ -141,8 +151,12 @@ export default function Testimonials() {
                         </svg>
                       ))}
                     </div>
-                    <h4 className="text-white text-base font-bold tracking-tight">{currentTestimonial.name}</h4>
-                    <p className="text-[#e1c693] text-xs font-medium uppercase tracking-wider">{currentTestimonial.role}</p>
+                    <h4 className={`text-base font-bold tracking-tight transition-colors duration-500 ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}>
+                      {currentTestimonial.name}
+                    </h4>
+                    {/* <p className="text-[#e1c693] text-xs font-medium uppercase tracking-wider">{currentTestimonial.role}</p> */}
                   </div>
                 </div>
               </motion.div>
@@ -152,19 +166,29 @@ export default function Testimonials() {
             <div className="flex items-center gap-3 mt-8">
               <button
                 onClick={goToPrev}
-                className="group w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693] transition-all duration-300"
+                className={`group w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                  theme === "dark" 
+                    ? "border-white/10 text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]" 
+                    : "border-gray-300 text-gray-600 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]"
+                }`}
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={goToNext}
-                className="group w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693] transition-all duration-300"
+                className={`group w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                  theme === "dark" 
+                    ? "border-white/10 text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]" 
+                    : "border-gray-300 text-gray-600 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]"
+                }`}
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               {/* Counter */}
-              <div className="ml-1 text-xs font-bold text-gray-500 tracking-widest">
+              <div className={`ml-1 text-xs font-bold tracking-widest transition-colors duration-500 ${
+                theme === "dark" ? "text-gray-500" : "text-gray-600"
+              }`}>
                 <span className="text-[#e1c693]">0{currentIndex + 1}</span> / 0{testimonials.length}
               </div>
             </div>

@@ -1,59 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import { 
-  ArrowRight, 
   Mail, 
   Phone, 
   MapPin, 
   Send,
-  Code2,
-  ShoppingBag,
-  Palette,
-  Smartphone,
-  Play,
-  Globe,
   Heart,
-  ArrowUp,
-  Sparkles,
-  MoveUpRight
+  ArrowUp
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Footer() {
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const servicesLinks = [
-    { name: "Website Development", icon: Code2 },
-    { name: "Ecommerce Solutions", icon: ShoppingBag },
-    { name: "Branding & Identity", icon: Palette },
-    { name: "Mobile Applications", icon: Smartphone },
-    { name: "Video Animation", icon: Play },
-    { name: "SEO Optimization", icon: Globe },
-  ];
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      return;
+    }
+    setIsSubscribing(true);
+    // Add your newsletter subscription logic here
+    console.log("Subscribing email:", email);
+    setTimeout(() => {
+      setEmail("");
+      setIsSubscribing(false);
+      alert("Thank you for subscribing!");
+    }, 1000);
+  };
 
-  const companyLinks = [
-    "About Us",
-    "Our Team",
-    "Careers",
-    "Case Studies",
-    "Testimonials",
-    "Blog",
+  // Handle navigation for Home link
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    if (pathname !== "/") {
+      // If not on home page, navigate to home page
+      router.push("/");
+      // Small delay to ensure page loads then scroll
+      setTimeout(() => {
+        const homeSection = document.getElementById("home");
+        if (homeSection) {
+          homeSection.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      // If already on home page, just scroll to top
+      const homeSection = document.getElementById("home");
+      if (homeSection) {
+        const offsetTop = homeSection.offsetTop - 80;
+        window.scrollTo({ top: offsetTop, behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
+
+  // Quick Links Section
+  const quickLinks = [
+    { name: "Home", href: "/", isPageLink: true, isHashLink: false },
+    { name: "Services", href: "/services", isPageLink: true, isHashLink: false },
+    { name: "Contact", href: "/contact", isPageLink: true, isHashLink: false },
   ];
 
   const supportLinks = [
-    "Help Center",
-    "FAQs",
-    "Contact Us",
-    "Privacy Policy",
-    "Terms of Service",
-    "Sitemap",
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
   ];
 
+  // Get current theme (handle system theme)
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
+
   return (
-    <footer className="relative bg-[#020202] overflow-hidden">
+    <footer 
+      className={`relative overflow-hidden transition-colors duration-500 ${
+        isDark ? "bg-[#020202]" : "bg-[#f8f9fa]"
+      }`}
+      suppressHydrationWarning
+    >
       {/* Background Ambient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(225,198,147,0.06)_0%,_transparent_50%)]" />
       <div className="absolute inset-0 opacity-[0.02]">
@@ -61,8 +102,8 @@ export default function Footer() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
+              linear-gradient(${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -71,97 +112,64 @@ export default function Footer() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-8 md:px-12">
         
-        {/* ===== 1. MASSIVE CTA SECTION ===== */}
-        <div className="py-20 md:py-32 border-b border-white/5">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#e1c693]/5 border border-[#e1c693]/30 rounded-full mb-8 backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 text-[#e1c693]" />
-              <span className="text-[#e1c693] text-xs font-bold uppercase tracking-wider">Start a Project</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tight mb-8">
-              Have an idea?{" "}
-              <br className="hidden md:block" />
-              <span 
-                className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54] italic"
-                style={{ fontFamily: "'Playfair Display', serif" }}
-              >
-                Let's talk
-              </span>{" "}
-              about it.
-            </h2>
-
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-              Collaborate with our digital design, development and marketing professionals to step-up financial performance of your brand.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <motion.a
-                href="/contact"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-xl shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40 transition-all duration-300 overflow-hidden"
-              >
-                <span className="relative z-10">Get a Free Consultation</span>
-                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              </motion.a>
-
-              <a
-                href="tel:+18774766927"
-                className="inline-flex items-center gap-3 px-10 py-4 border border-white/10 text-white font-semibold text-sm rounded-xl hover:bg-white/5 hover:border-[#e1c693]/30 transition-all duration-300"
-              >
-                <Phone className="w-4 h-4 text-[#e1c693]" /> +1-(877) 476-6927
-              </a>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ===== 2. MAIN FOOTER GRID ===== */}
+        {/* ===== MAIN FOOTER GRID ===== */}
         <div className="py-16 md:py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           
           {/* Brand & Contact Column */}
           <div className="lg:col-span-4">
-            <a href="/" className="inline-flex items-center gap-3 mb-8 group">
-              {/* Local Image Logo from Public Folder */}
+            <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
               <img 
                 src="/images/img1.png" 
                 alt="AM-Verify Logo" 
                 className="h-12 w-12 object-contain rounded-lg"
               />
               <div>
-                <span className="text-2xl font-bold text-white tracking-tight">
-                  AM-Verify<span className="text-[#e1c693]">.</span>
-                </span>
-                <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em]">Digital Agency</p>
+               <span className={`text-2xl font-black tracking-tighter text-[#e1c693] transition-colors duration-500`}>
+  FlashTeck<span className="text-[#b08d57]">.</span>
+</span>
+                <p className={`text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${
+                  isDark ? "text-gray-500" : "text-gray-600"
+                }`}>Digital Agency</p>
               </div>
-            </a>
+            </Link>
 
-            <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-xs">
+            <p className={`text-sm leading-relaxed mb-8 max-w-xs transition-colors duration-500 ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}>
               We craft digital experiences that drive growth, engagement, and lasting impact for brands worldwide.
             </p>
 
             <div className="space-y-4">
-              <a href="tel:+18774766927" className="flex items-center gap-4 text-gray-400 hover:text-[#e1c693] transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#e1c693]/30 transition-all">
+              <a href="tel:+18774766927" className={`flex items-center gap-4 transition-colors group ${
+                isDark ? "text-gray-400 hover:text-[#e1c693]" : "text-gray-600 hover:text-[#a78b54]"
+              }`}>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
+                  isDark 
+                    ? "bg-white/[0.03] border border-white/10 group-hover:border-[#e1c693]/30" 
+                    : "bg-white border border-gray-200 group-hover:border-[#a78b54]/30"
+                }`}>
                   <Phone className="w-4 h-4" />
                 </div>
-                <span className="text-sm">+1-(877) 476-6927</span>
+                <span className="text-sm">+1 (831) 207-4991</span>
               </a>
-              <a href="mailto:info@AM-Verify.com" className="flex items-center gap-4 text-gray-400 hover:text-[#e1c693] transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover:border-[#e1c693]/30 transition-all">
+              <a href="mailto:info@AM-Verify.com" className={`flex items-center gap-4 transition-colors group ${
+                isDark ? "text-gray-400 hover:text-[#e1c693]" : "text-gray-600 hover:text-[#a78b54]"
+              }`}>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
+                  isDark 
+                    ? "bg-white/[0.03] border border-white/10 group-hover:border-[#e1c693]/30" 
+                    : "bg-white border border-gray-200 group-hover:border-[#a78b54]/30"
+                }`}>
                   <Mail className="w-4 h-4" />
                 </div>
-                <span className="text-sm">info@AM-Verify.com</span>
+                <span className="text-sm">info@flashteck.com</span>
               </a>
-              <div className="flex items-center gap-4 text-gray-400">
-                <div className="w-10 h-10 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center">
+              <div className={`flex items-center gap-4 ${
+                isDark ? "text-gray-400" : "text-gray-600"
+              }`}>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  isDark ? "bg-white/[0.03] border border-white/10" : "bg-white border border-gray-200"
+                }`}>
                   <MapPin className="w-4 h-4" />
                 </div>
                 <span className="text-sm">New York, USA</span>
@@ -169,96 +177,135 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services Column */}
-          <div className="lg:col-span-3">
-            <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Services
+          {/* Quick Links Column */}
+          <div className="lg:col-span-2">
+            <h4 className={`font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3 transition-colors duration-500 ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}>
+              <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Quick Links
             </h4>
             <ul className="space-y-4">
-              {servicesLinks.map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a href="#" className="group flex items-center gap-3 text-gray-400 hover:text-[#e1c693] transition-all duration-300">
-                    <link.icon className="w-4 h-4 text-gray-600 group-hover:text-[#e1c693] transition-colors" />
-                    <span className="text-sm border-b border-transparent group-hover:border-[#e1c693]/30 pb-0.5 transition-all">{link.name}</span>
-                    <MoveUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-[#e1c693]" />
-                  </a>
+                  {link.name === "Home" ? (
+                    <a 
+                      href={link.href}
+                      onClick={handleHomeClick}
+                      className={`hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group cursor-pointer ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
+                      <span className={`w-1 h-1 rounded-full transition-colors ${
+                        isDark ? "bg-gray-600 group-hover:bg-[#e1c693]" : "bg-gray-400 group-hover:bg-[#a78b54]"
+                      }`}></span> {link.name}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className={`hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}>
+                      <span className={`w-1 h-1 rounded-full transition-colors ${
+                        isDark ? "bg-gray-600 group-hover:bg-[#e1c693]" : "bg-gray-400 group-hover:bg-[#a78b54]"
+                      }`}></span> {link.name}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Support Column */}
+          <div className="lg:col-span-2">
+            <h4 className={`font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3 transition-colors duration-500 ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}>
+              <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Support
+            </h4>
+            <ul className="space-y-4">
+              {supportLinks.map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className={`hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group ${
+                    isDark ? "text-gray-400" : "text-gray-600"
+                  }`}>
+                    <span className={`w-1 h-1 rounded-full transition-colors ${
+                      isDark ? "bg-gray-600 group-hover:bg-[#e1c693]" : "bg-gray-400 group-hover:bg-[#a78b54]"
+                    }`}></span> {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Company & Support Combined Column */}
-          <div className="lg:col-span-2 grid grid-cols-2 gap-8 lg:grid-cols-1 lg:gap-6">
-            <div>
-              <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
-                <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Company
-              </h4>
-              <ul className="space-y-4">
-                {companyLinks.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-400 hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group">
-                      <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-[#e1c693] transition-colors"></span> {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-8 flex items-center gap-3">
-                <span className="w-8 h-[1px] bg-[#e1c693] inline-block"></span> Support
-              </h4>
-              <ul className="space-y-4">
-                {supportLinks.slice(0, 5).map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-400 hover:text-[#e1c693] transition-colors text-sm flex items-center gap-2 group">
-                      <span className="w-1 h-1 bg-gray-600 rounded-full group-hover:bg-[#e1c693] transition-colors"></span> {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Newsletter Column (Glassmorphic) */}
-          <div className="lg:col-span-3">
-            <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group">
+          {/* Newsletter Column - Right Side */}
+          <div className="lg:col-span-4">
+            <div className={`rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group ${
+              isDark 
+                ? "bg-white/[0.02] border border-white/10" 
+                : "bg-black/[0.01] border border-gray-200"
+            }`}>
               {/* Ambient glow inside card */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e1c693]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
               
-              <h4 className="text-white font-bold text-base mb-2 relative z-10">Newsletter</h4>
-              <p className="text-gray-500 text-xs mb-5 leading-relaxed relative z-10">Get the latest updates and insights directly to your inbox.</p>
-              <div className="space-y-3 relative z-10">
+              <h4 className={`font-bold text-base mb-2 relative z-10 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}>Newsletter</h4>
+              <p className={`text-xs mb-5 leading-relaxed relative z-10 ${
+                isDark ? "text-gray-500" : "text-gray-600"
+              }`}>Subscribe to get the latest updates and insights directly to your inbox.</p>
+              
+              <form onSubmit={handleSubscribe} className="space-y-3 relative z-10">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#e1c693]/50 text-sm"
+                  className={`w-full px-4 py-3 rounded-lg text-sm transition-colors duration-300 focus:outline-none focus:border-[#e1c693]/50 ${
+                    isDark 
+                      ? "bg-white/5 border border-white/10 text-white placeholder-gray-500" 
+                      : "bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400"
+                  }`}
+                  required
+                  suppressHydrationWarning
                 />
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#e1c693]/20 transition-all duration-300">
-                  Subscribe <Send className="w-3.5 h-3.5" />
+                <button 
+                  type="submit"
+                  disabled={isSubscribing}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#e1c693]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
+                >
+                  {isSubscribing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                      Subscribing...
+                    </>
+                  ) : (
+                    <>
+                      Subscribe <Send className="w-3.5 h-3.5" />
+                    </>
+                  )}
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
 
-        {/* ===== 3. BOTTOM BAR ===== */}
-        <div className="border-t border-white/5 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-gray-500 text-xs text-center md:text-left"
-          >
-            © 2026 <span className="text-white font-semibold">AM-Verify.</span> All rights reserved. Crafted with <Heart className="w-3 h-3 inline text-[#e1c693] fill-[#e1c693]" /> in USA
-          </motion.p>
-
-          <div className="flex items-center gap-6 text-xs text-gray-500">
-            <a href="#" className="hover:text-[#e1c693] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#e1c693] transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-[#e1c693] transition-colors">Sitemap</a>
-          </div>
-        </div>
+{/* ===== BOTTOM BAR ===== */}
+<div className={`border-t py-8 flex flex-col items-center justify-center gap-4 transition-colors duration-500 ${
+  isDark ? "border-white/5" : "border-gray-200"
+}`}>
+  <motion.p
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
+    className={`text-xs text-center transition-colors duration-500 ${
+      isDark ? "text-gray-500" : "text-gray-600"
+    }`}
+    suppressHydrationWarning
+  >
+    © {new Date().getFullYear()} <span className={`font-semibold ${
+      isDark ? "text-white" : "text-gray-900"
+    }`}>Flashteck</span> All rights reserved. Flashteck is a subsidiary of Leadanics LLC.
+  </motion.p>
+</div>
       </div>
 
       {/* ===== SCROLL TO TOP ===== */}
@@ -266,7 +313,12 @@ export default function Footer() {
         onClick={scrollToTop}
         whileHover={{ y: -3, scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full border border-[#e1c693]/50 bg-[#020202] text-[#e1c693] flex items-center justify-center shadow-lg shadow-black/50 hover:bg-[#e1c693] hover:text-black transition-all duration-300 group"
+        className={`fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full border border-[#e1c693]/50 flex items-center justify-center shadow-lg transition-all duration-300 group ${
+          isDark 
+            ? "bg-[#020202] text-[#e1c693] shadow-black/50 hover:bg-[#e1c693] hover:text-black" 
+            : "bg-white text-[#a78b54] shadow-gray-300 hover:bg-[#a78b54] hover:text-white"
+        }`}
+        suppressHydrationWarning
       >
         <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform duration-300" />
       </motion.button>

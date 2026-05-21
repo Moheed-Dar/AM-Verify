@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useTheme } from "next-themes";
 import {
   Eye,
   ExternalLink,
@@ -19,6 +20,7 @@ import {
 export default function OurWork() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -103,7 +105,9 @@ export default function OurWork() {
     <section
       ref={ref}
       id="work"
-      className="relative bg-[#050505] overflow-hidden py-20 md:py-28"
+      className={`relative overflow-hidden py-20 md:py-28 transition-colors duration-500 ${
+        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+      }`}
     >
       {/* Ambient Lights */}
       <div className="absolute inset-0">
@@ -123,15 +127,20 @@ export default function OurWork() {
             <Sparkles className="w-4 h-4 text-[#e1c693]" />
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Portfolio</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4">
+          <h2 className={`text-4xl md:text-5xl lg:text-6xl font-black mb-4 transition-colors duration-500 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
+          }`}>
             See Our{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               Work
             </span>
           </h2>
 
-          <p className="text-gray-400 max-w-3xl mx-auto text-base md:text-lg leading-relaxed">
+          <p className={`max-w-3xl mx-auto text-base md:text-lg leading-relaxed transition-colors duration-500 ${
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
+          }`}>
             Our work is a testament to our expertise. It speaks aloud in respect of e-commerce, web and mobile application, SEO, and branding.
+            Our dedicated team partners with high growth industries and established enterprises to turn services into measurable sales. We drive customer retention, strengthen brand trust, and accelerate acquisition, transforming operations into profitable growth engines.
           </p>
         </motion.div>
 
@@ -140,14 +149,20 @@ export default function OurWork() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b border-white/10 pb-4"
+          className={`flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b pb-4 transition-colors duration-500 ${
+            theme === "dark" ? "border-white/10" : "border-gray-300"
+          }`}
         >
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`relative flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
-                activeTab === tab.id ? "text-[#e1c693]" : "text-gray-500 hover:text-gray-300"
+                activeTab === tab.id
+                  ? "text-[#e1c693]"
+                  : theme === "dark"
+                  ? "text-gray-500 hover:text-gray-300"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               {activeTab === tab.id && (

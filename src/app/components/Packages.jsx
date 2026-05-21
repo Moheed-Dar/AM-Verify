@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 import { Check, ArrowRight, Sparkles, Crown } from "lucide-react";
 
 const packagesData = {
@@ -336,9 +337,14 @@ const tabs = [
 
 export default function Packages() {
   const [activeTab, setActiveTab] = useState("Combo Packages");
+  const { theme } = useTheme();
 
   return (
-    <section className="relative bg-[#050505] py-24 overflow-hidden">
+    <section
+      className={`relative overflow-hidden py-24 transition-colors duration-500 ${
+        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+      }`}
+    >
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(225,198,147,0.05)_0%,_transparent_50%)]" />
@@ -347,8 +353,8 @@ export default function Packages() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
+              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -368,13 +374,21 @@ export default function Packages() {
             <Sparkles className="w-4 h-4 text-[#e1c693]" />
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Pricing</span>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight">
+          <h2
+            className={`text-4xl md:text-5xl lg:text-6xl font-black tracking-tight transition-colors duration-500 ${
+              theme === "dark" ? "text-white" : "text-gray-900"
+            }`}
+          >
             See Our{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               Packages
             </span>
           </h2>
-          <p className="mt-6 text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p
+            className={`mt-6 max-w-2xl mx-auto text-lg leading-relaxed transition-colors duration-500 ${
+              theme === "dark" ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             Transparent pricing tailored for businesses of all sizes. No hidden fees.
           </p>
         </motion.div>
@@ -385,14 +399,20 @@ export default function Packages() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b border-white/10 pb-4"
+          className={`flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b pb-4 transition-colors duration-500 ${
+            theme === "dark" ? "border-white/10" : "border-gray-300"
+          }`}
         >
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`relative flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
-                activeTab === tab ? "text-[#e1c693]" : "text-gray-500 hover:text-gray-300"
+                activeTab === tab
+                  ? "text-[#e1c693]"
+                  : theme === "dark"
+                  ? "text-gray-500 hover:text-gray-300"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               {activeTab === tab && (
@@ -442,7 +462,13 @@ export default function Packages() {
 
                   <div className="relative z-10 flex flex-col h-full p-8">
                     {/* Package Name */}
-                    <h3 className={`text-xl font-bold mb-2 transition-colors duration-300 ${isFeatured ? 'text-[#e1c693]' : 'text-white group-hover:text-[#e1c693]'}`}>
+                    <h3
+                      className={`text-xl font-bold mb-2 transition-colors duration-300 ${
+                        isFeatured
+                          ? "text-[#e1c693]"
+                          : "text-white group-hover:text-[#e1c693]"
+                      }`}
+                    >
                       {pkg.name}
                     </h3>
 
@@ -453,8 +479,10 @@ export default function Packages() {
 
                     {/* Price */}
                     <div className="mb-8">
-                      <span className="text-gray-600 text-xs uppercase tracking-widest">Starting at</span>
-                      <div className={`text-5xl font-black tracking-tight ${isFeatured ? 'text-white' : 'text-white'}`}>
+                      <span className="text-gray-600 text-xs uppercase tracking-widest">
+                        Starting at
+                      </span>
+                      <div className="text-5xl font-black tracking-tight text-white">
                         {pkg.price}
                       </div>
                     </div>
@@ -477,10 +505,20 @@ export default function Packages() {
                     <div className="flex-1 space-y-4">
                       {pkg.features.map((feature, i) => (
                         <div key={i} className="flex items-start gap-3">
-                          <div className={`mt-1 rounded-full p-0.5 ${isFeatured ? 'bg-[#e1c693]/20 text-[#e1c693]' : 'bg-white/10 text-gray-500 group-hover:bg-[#e1c693]/10 group-hover:text-[#e1c693]'}`}>
+                          <div
+                            className={`mt-1 rounded-full p-0.5 ${
+                              isFeatured
+                                ? "bg-[#e1c693]/20 text-[#e1c693]"
+                                : "bg-white/10 text-gray-500 group-hover:bg-[#e1c693]/10 group-hover:text-[#e1c693]"
+                            }`}
+                          >
                             <Check className="w-3 h-3" />
                           </div>
-                          <span className={`text-sm leading-snug ${isFeatured ? 'text-gray-300' : 'text-gray-400'}`}>
+                          <span
+                            className={`text-sm leading-snug ${
+                              isFeatured ? "text-gray-300" : "text-gray-400"
+                            }`}
+                          >
                             {feature}
                           </span>
                         </div>

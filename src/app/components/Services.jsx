@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 import {
   Code2,
   ShoppingBag,
@@ -53,9 +54,15 @@ const services = [
 
 export default function Services() {
   const [activeService, setActiveService] = useState(0);
+  const { theme } = useTheme();
 
   return (
-    <section id="services" className="relative bg-[#050505] py-20 md:py-24 overflow-hidden">
+    <section
+      id="services"
+      className={`relative overflow-hidden py-20 md:py-24 transition-colors duration-500 ${
+        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+      }`}
+    >
       {/* Background Ambient Lights */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center_left,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
       <div className="absolute inset-0 opacity-[0.03]">
@@ -63,8 +70,8 @@ export default function Services() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(225,198,147,0.2) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(225,198,147,0.2) 1px, transparent 1px)
+              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -85,7 +92,9 @@ export default function Services() {
           <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-[0.2em] text-[#e1c693] uppercase bg-[#e1c693]/5 rounded-full border border-[#e1c693]/20 backdrop-blur-sm">
             What We Do
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight transition-colors duration-500 ${
+            theme === "dark" ? "text-white" : "text-gray-900"
+          }`}>
             Services We{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
               Offer
@@ -97,7 +106,9 @@ export default function Services() {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           
           {/* Left Side: Service List - Reduced Padding & Sizes */}
-          <div className="w-full lg:w-1/2 flex flex-col divide-y divide-white/5">
+          <div className={`w-full lg:w-1/2 flex flex-col divide-y transition-colors duration-500 ${
+            theme === "dark" ? "divide-white/5" : "divide-gray-200"
+          }`}>
             {services.map((service, index) => {
               const Icon = service.icon;
               const isActive = activeService === index;
@@ -126,7 +137,9 @@ export default function Services() {
 
                   <div className="flex items-center gap-4">
                     {/* Number */}
-                    <span className={`text-xs font-bold transition-colors duration-300 ${isActive ? 'text-[#e1c693]' : 'text-gray-700'}`}>
+                    <span className={`text-xs font-bold transition-colors duration-300 ${
+                      isActive ? 'text-[#e1c693]' : theme === "dark" ? 'text-gray-700' : 'text-gray-400'
+                    }`}>
                       0{index + 1}
                     </span>
 
@@ -134,14 +147,18 @@ export default function Services() {
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center border transition-all duration-500 ${
                       isActive 
                         ? "bg-[#e1c693]/10 border-[#e1c693]/40 text-[#e1c693]" 
-                        : "bg-white/5 border-white/10 text-gray-500 group-hover:border-white/30 group-hover:text-gray-300"
+                        : theme === "dark" 
+                          ? "bg-white/5 border-white/10 text-gray-500 group-hover:border-white/30 group-hover:text-gray-300"
+                          : "bg-gray-100 border-gray-200 text-gray-500 group-hover:border-gray-400 group-hover:text-gray-700"
                     }`}>
                       <Icon className="w-4 h-4" />
                     </div>
 
                     {/* Title - Reduced size */}
                     <h3 className={`text-lg md:text-xl font-semibold transition-colors duration-300 ${
-                      isActive ? "text-white" : "text-gray-400 group-hover:text-white"
+                      isActive 
+                        ? theme === "dark" ? "text-white" : "text-gray-900"
+                        : theme === "dark" ? "text-gray-400 group-hover:text-white" : "text-gray-500 group-hover:text-gray-900"
                     }`}>
                       {service.title}
                     </h3>

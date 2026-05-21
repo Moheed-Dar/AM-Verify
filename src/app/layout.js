@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Poppins } from "next/font/google";
 import LenisProvider from "./components/LenisProvider";
+import Providers from "./providers";     // ← Yeh add kiya
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,14 +21,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} font-sans`} suppressHydrationWarning>
-        
-        {/* Smooth Scroll Provider */}
-        <LenisProvider />
-
-        <Navbar />
-        {children}
-        <Footer />
-
+        <Providers>                     {/* ← Providers wrap kiya */}
+          <LenisProvider />
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

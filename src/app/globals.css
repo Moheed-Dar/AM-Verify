@@ -4,9 +4,9 @@
   --font-poppins: "Poppins", system-ui, sans-serif;
 
   /* Golden Scrollbar Theme */
-  --scrollbar-thumb: #d4af37;        /* Gold */
-  --scrollbar-thumb-hover: #b8901f;  /* Darker Gold */
-  --scrollbar-track: #f8f5ec;        /* Light warm background */
+  --scrollbar-thumb: #d4af37;
+  --scrollbar-thumb-hover: #b8901f;
+  --scrollbar-track: transparent;
 }
 
 body {
@@ -14,19 +14,19 @@ body {
   overflow-x: hidden;
 }
 
-html {
-  scroll-behavior: auto;
+/* Dark Mode Support */
+.dark {
+  --scrollbar-thumb: #e1c693;
+  --scrollbar-thumb-hover: #c9a55f;
 }
 
 /* =============== GOLDEN SCROLLBAR =============== */
-
-/* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
   width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
+  background: transparent;
   border-radius: 10px;
 }
 
@@ -43,5 +43,15 @@ html {
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-shift {
+  background-size: 200% auto;
+  animation: gradient-shift 8s ease infinite;
 }
