@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import { Check, ArrowRight, Sparkles, Crown } from "lucide-react";
@@ -337,13 +337,44 @@ const tabs = [
 
 export default function Packages() {
   const [activeTab, setActiveTab] = useState("Combo Packages");
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
+
+  // Don't render theme-dependent styles until mounted
+  if (!mounted) {
+    return (
+      <section className="relative overflow-hidden py-24 transition-colors duration-500 bg-[#050505]">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#e1c693]/30 rounded-full bg-[#e1c693]/5 mb-6 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-[#e1c693]" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#e1c693]">Pricing</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white">
+              See Our{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
+                Packages
+              </span>
+            </h2>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       className={`relative overflow-hidden py-24 transition-colors duration-500 ${
-        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+        isDark ? "bg-[#050505]" : "bg-[#f8f9fa]"
       }`}
+      suppressHydrationWarning
     >
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(225,198,147,0.08)_0%,_transparent_50%)]" />
@@ -353,8 +384,8 @@ export default function Packages() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
-              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
+              linear-gradient(${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -376,7 +407,7 @@ export default function Packages() {
           </div>
           <h2
             className={`text-4xl md:text-5xl lg:text-6xl font-black tracking-tight transition-colors duration-500 ${
-              theme === "dark" ? "text-white" : "text-gray-900"
+              isDark ? "text-white" : "text-gray-900"
             }`}
           >
             See Our{" "}
@@ -386,7 +417,7 @@ export default function Packages() {
           </h2>
           <p
             className={`mt-6 max-w-2xl mx-auto text-lg leading-relaxed transition-colors duration-500 ${
-              theme === "dark" ? "text-gray-400" : "text-gray-600"
+              isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
             Transparent pricing tailored for businesses of all sizes. No hidden fees.
@@ -400,7 +431,7 @@ export default function Packages() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className={`flex flex-wrap justify-center gap-4 md:gap-8 mb-16 border-b pb-4 transition-colors duration-500 ${
-            theme === "dark" ? "border-white/10" : "border-gray-300"
+            isDark ? "border-white/10" : "border-gray-200"
           }`}
         >
           {tabs.map((tab) => (
@@ -410,7 +441,7 @@ export default function Packages() {
               className={`relative flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
                 activeTab === tab
                   ? "text-[#e1c693]"
-                  : theme === "dark"
+                  : isDark
                   ? "text-gray-500 hover:text-gray-300"
                   : "text-gray-600 hover:text-gray-900"
               }`}
@@ -449,13 +480,17 @@ export default function Packages() {
                   whileHover={{ y: -8 }}
                   className={`group relative flex flex-col rounded-3xl overflow-hidden border backdrop-blur-md transition-all duration-700 ${
                     isFeatured
-                      ? "border-[#e1c693]/60 bg-gradient-to-b from-[#e1c693]/10 to-[#0a0a0a] shadow-[0_0_50px_rgba(225,198,147,0.15)] scale-[1.02] z-10"
-                      : "border-white/5 bg-[#0a0a0a] hover:border-[#e1c693]/30"
+                      ? isDark
+                        ? "border-[#e1c693]/60 bg-gradient-to-b from-[#e1c693]/10 to-[#0a0a0a] shadow-[0_0_50px_rgba(225,198,147,0.15)] scale-[1.02] z-10"
+                        : "border-[#e1c693]/60 bg-gradient-to-b from-[#e1c693]/20 to-white shadow-[0_0_50px_rgba(225,198,147,0.1)] scale-[1.02] z-10"
+                      : isDark
+                      ? "border-white/5 bg-[#0a0a0a] hover:border-[#e1c693]/30"
+                      : "border-gray-200 bg-white hover:border-[#e1c693]/40 shadow-sm hover:shadow-xl"
                   }`}
                 >
                   {/* Featured Badge */}
                   {isFeatured && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 bg-[#e1c693] text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+                    <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 bg-[#e1c693] text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-lg z-20">
                       <Crown className="w-3 h-3" /> Popular
                     </div>
                   )}
@@ -466,23 +501,31 @@ export default function Packages() {
                       className={`text-xl font-bold mb-2 transition-colors duration-300 ${
                         isFeatured
                           ? "text-[#e1c693]"
-                          : "text-white group-hover:text-[#e1c693]"
+                          : isDark
+                          ? "text-white group-hover:text-[#e1c693]"
+                          : "text-gray-900 group-hover:text-[#a78b54]"
                       }`}
                     >
                       {pkg.name}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-gray-500 text-sm mb-6 leading-relaxed min-h-10">
+                    <p className={`text-sm mb-6 leading-relaxed min-h-10 ${
+                      isDark ? "text-gray-500" : "text-gray-500"
+                    }`}>
                       {pkg.description}
                     </p>
 
                     {/* Price */}
                     <div className="mb-8">
-                      <span className="text-gray-600 text-xs uppercase tracking-widest">
+                      <span className={`text-xs uppercase tracking-widest ${
+                        isDark ? "text-gray-600" : "text-gray-400"
+                      }`}>
                         Starting at
                       </span>
-                      <div className="text-5xl font-black tracking-tight text-white">
+                      <div className={`text-5xl font-black tracking-tight ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}>
                         {pkg.price}
                       </div>
                     </div>
@@ -494,7 +537,9 @@ export default function Packages() {
                       className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mb-8 transition-all duration-300 ${
                         isFeatured
                           ? "bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40"
-                          : "bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-[#e1c693]/40 hover:text-[#e1c693]"
+                          : isDark
+                          ? "bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-[#e1c693]/40 hover:text-[#e1c693]"
+                          : "bg-gray-100 border border-gray-300 text-gray-700 hover:bg-white hover:border-[#a78b54]/40 hover:text-[#a78b54]"
                       }`}
                     >
                       Get Started
@@ -506,17 +551,21 @@ export default function Packages() {
                       {pkg.features.map((feature, i) => (
                         <div key={i} className="flex items-start gap-3">
                           <div
-                            className={`mt-1 rounded-full p-0.5 ${
+                            className={`mt-1 rounded-full p-0.5 transition-colors duration-300 ${
                               isFeatured
                                 ? "bg-[#e1c693]/20 text-[#e1c693]"
-                                : "bg-white/10 text-gray-500 group-hover:bg-[#e1c693]/10 group-hover:text-[#e1c693]"
+                                : isDark
+                                ? "bg-white/10 text-gray-500 group-hover:bg-[#e1c693]/10 group-hover:text-[#e1c693]"
+                                : "bg-gray-200 text-gray-400 group-hover:bg-[#a78b54]/10 group-hover:text-[#a78b54]"
                             }`}
                           >
                             <Check className="w-3 h-3" />
                           </div>
                           <span
                             className={`text-sm leading-snug ${
-                              isFeatured ? "text-gray-300" : "text-gray-400"
+                              isFeatured
+                                ? isDark ? "text-gray-300" : "text-gray-700"
+                                : isDark ? "text-gray-400" : "text-gray-600"
                             }`}
                           >
                             {feature}

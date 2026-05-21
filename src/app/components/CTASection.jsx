@@ -1,17 +1,49 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Phone, ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 
 export default function CTASection() {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTheme = !mounted ? "dark" : (theme === "system" ? systemTheme : theme);
+  const isDark = currentTheme === "dark";
+
+  // Don't render theme-dependent styles until mounted
+  if (!mounted) {
+    return (
+      <section className="relative overflow-hidden py-16 md:py-24 transition-colors duration-500 bg-[#050505]">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="py-20 md:py-32 border-b border-white/5">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#e1c693]/5 border border-[#e1c693]/30 rounded-full mb-8 backdrop-blur-sm">
+                <Sparkles className="w-4 h-4 text-[#e1c693]" />
+                <span className="text-[#e1c693] text-xs font-bold uppercase tracking-wider">Start a Project</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-8 text-white">
+                Have an idea? <br className="hidden md:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54] italic">Let's talk.</span> about it.
+              </h2>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       className={`relative overflow-hidden py-16 md:py-24 transition-colors duration-500 ${
-        theme === "dark" ? "bg-[#050505]" : "bg-[#f8f9fa]"
+        isDark ? "bg-[#050505]" : "bg-[#f8f9fa]"
       }`}
+      suppressHydrationWarning
     >
       {/* Background Grid */}
       <div className="absolute inset-0 opacity-[0.03]">
@@ -19,8 +51,8 @@ export default function CTASection() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
-              linear-gradient(90deg, ${theme === "dark" ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
+              linear-gradient(${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px),
+              linear-gradient(90deg, ${isDark ? "rgba(225,198,147,0.2)" : "rgba(225,198,147,0.4)"} 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
           }}
@@ -30,15 +62,21 @@ export default function CTASection() {
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         
         {/* Ambient Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#e1c693]/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[120px] pointer-events-none ${
+          isDark ? "bg-[#e1c693]/5" : "bg-[#e1c693]/10"
+        }`}></div>
 
-        {/* Compact Main Container (Card - Unchanged) */}
+        {/* Compact Main Container (Card) */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-2xl overflow-hidden border border-[#e1c693]/20 bg-[#0a0a0a] shadow-xl shadow-black/20"
+          className={`relative rounded-2xl overflow-hidden border ${
+            isDark 
+              ? "border-[#e1c693]/20 bg-[#0a0a0a] shadow-xl shadow-black/20" 
+              : "border-[#e1c693]/30 bg-white shadow-xl shadow-gray-300/20"
+          }`}
         >
           <div className="grid md:grid-cols-2">
             
@@ -60,9 +98,13 @@ export default function CTASection() {
             </div>
 
             {/* Right Side: Content (Compact) */}
-            <div className="relative p-8 md:p-10 flex flex-col justify-center">
+            <div className={`relative p-8 md:p-10 flex flex-col justify-center ${
+              isDark ? "" : "bg-white"
+            }`}>
               {/* Heading */}
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight mb-4 leading-tight">
+              <h2 className={`text-2xl md:text-3xl lg:text-4xl font-black tracking-tight mb-4 leading-tight ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}>
                 Let's Talk{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e1c693] to-[#a78b54]">
                   Right Away
@@ -70,7 +112,9 @@ export default function CTASection() {
               </h2>
 
               {/* Description */}
-              <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
+              <p className={`text-sm leading-relaxed mb-8 max-w-sm ${
+                isDark ? "text-gray-400" : "text-gray-600"
+              }`}>
                 Collaborate with our digital design, development and marketing professionals to step-up financial performance of your brand.
               </p>
 
@@ -93,9 +137,17 @@ export default function CTASection() {
                   href="tel:+18774766927"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="group inline-flex items-center justify-center gap-3 px-6 py-3 bg-white/5 border border-white/10 text-white font-medium text-xs rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-[#e1c693]/30"
+                  className={`group inline-flex items-center justify-center gap-3 px-6 py-3 text-white font-medium text-xs rounded-lg transition-all duration-300 ${
+                    isDark 
+                      ? "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#e1c693]/30" 
+                      : "bg-gray-100 border border-gray-300 text-gray-800 hover:bg-gray-200 hover:border-[#e1c693]/40"
+                  }`}
                 >
-                  <div className="w-7 h-7 rounded-full bg-[#e1c693]/10 border border-[#e1c693]/30 flex items-center justify-center">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center ${
+                    isDark 
+                      ? "bg-[#e1c693]/10 border border-[#e1c693]/30" 
+                      : "bg-[#e1c693]/20 border border-[#e1c693]/40"
+                  }`}>
                     <Phone className="w-3 h-3 text-[#e1c693]" />
                   </div>
                   <span>+1-(877) 476-6927</span>
@@ -107,7 +159,7 @@ export default function CTASection() {
         
         {/* Bottom CTA Section (Outside Card) */}
         <div className={`py-20 md:py-32 border-b transition-colors duration-500 ${
-          theme === "dark" ? "border-white/5" : "border-gray-300"
+          isDark ? "border-white/5" : "border-gray-200"
         }`}>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -122,7 +174,7 @@ export default function CTASection() {
             </div>
             
             <h2 className={`text-4xl md:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-8 transition-colors duration-500 ${
-              theme === "dark" ? "text-white" : "text-gray-900"
+              isDark ? "text-white" : "text-gray-900"
             }`}>
               Have an idea?{" "}
               <br className="hidden md:block" />
@@ -136,7 +188,7 @@ export default function CTASection() {
             </h2>
 
             <p className={`text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed transition-colors duration-500 ${
-              theme === "dark" ? "text-gray-400" : "text-gray-600"
+              isDark ? "text-gray-400" : "text-gray-600"
             }`}>
               Collaborate with our digital design, development and marketing professionals to step-up financial performance of your brand.
             </p>
@@ -156,9 +208,9 @@ export default function CTASection() {
               <a
                 href="tel:+18774766927"
                 className={`inline-flex items-center gap-3 px-10 py-4 border font-semibold text-sm rounded-xl transition-all duration-300 hover:border-[#e1c693]/30 ${
-                  theme === "dark" 
+                  isDark 
                     ? "border-white/10 text-white hover:bg-white/5" 
-                    : "border-gray-300 text-gray-900 hover:bg-gray-100"
+                    : "border-gray-300 text-gray-900 hover:bg-gray-100 hover:border-[#a78b54]/40"
                 }`}
               >
                 <Phone className="w-4 h-4 text-[#e1c693]" /> +1 (831) 207-4991
