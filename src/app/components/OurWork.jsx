@@ -59,7 +59,7 @@ export default function OurWork() {
       title: "Social Connect",
       category: "mobile",
       description: "Interactive social networking app with real-time messaging and stories.",
-      image: "https://s3-alpha.figma.com/hub/file/3711112620/344a8a59-f0fb-4426-853f-c2cef5dff53f-cover.png",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT4YT73Y0cEIDpwUWQhYERGcGy3ZXq02FJYA&s",
       icon: Smartphone,
       stats: { views: "25K", likes: "4.2K" },
       tags: ["Social", "Messaging", "Live"],
