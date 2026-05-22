@@ -890,13 +890,13 @@ export default function Navbar() {
               {/* Theme Toggle Button */}
               <button 
                 onClick={toggleTheme} 
-                className={`p-2 rounded-md transition-colors duration-300 ${theme === "dark" ? "hover:bg-white/10 text-[#e1c693]" : "hover:bg-gray-100 text-[#a78b54]"}`} 
+                className={`p-2 rounded-md cursor-pointer transition-colors duration-300 ${theme === "dark" ? "hover:bg-white/10 text-[#e1c693]" : "hover:bg-gray-100 text-[#a78b54]"}`} 
                 aria-label="Toggle Theme"
               >
                 {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
 
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`md:hidden p-2 rounded-md transition-colors ${theme === "dark" ? "text-gray-300 hover:bg-white/5" : "text-gray-800 hover:bg-gray-100"}`}>
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`md:hidden p-2 cursor-pointer rounded-md transition-colors ${theme === "dark" ? "text-gray-300 hover:bg-white/5" : "text-gray-800 hover:bg-gray-100"}`}>
                 {isMenuOpen ? <Icons.X /> : <Icons.Menu />}
               </button>
             </div>

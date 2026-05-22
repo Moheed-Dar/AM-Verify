@@ -252,12 +252,12 @@ export default function Contact() {
                 </div>
 
                 {/* Submit Button */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+                <div className="flex flex-col  sm:flex-row items-center gap-4 pt-2">
                   <motion.button
                     type="submit"
                     whileHover={{ scale: 1.02, y: -1 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group relative w-full sm:w-auto sm:min-w-[250px] py-3.5 px-8 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-xl overflow-hidden shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40 transition-all duration-300"
+                    className="group relative w-full sm:w-auto cursor-pointer  sm:min-w-[250px] py-3.5 px-8 bg-gradient-to-r from-[#e1c693] to-[#a78b54] text-black font-bold text-sm rounded-xl overflow-hidden shadow-lg shadow-[#e1c693]/20 hover:shadow-[#e1c693]/40 transition-all duration-300"
                   >
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />

@@ -198,7 +198,7 @@ export default function Testimonials() {
             <div className="flex items-center gap-3 mt-8">
               <button
                 onClick={goToPrev}
-                className={`group w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                className={`group w-10 h-10 cursor-pointer rounded-full border flex items-center justify-center transition-all duration-300 ${
                   isDark 
                     ? "border-white/10 text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]" 
                     : "border-gray-300 text-gray-600 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]"
@@ -208,7 +208,7 @@ export default function Testimonials() {
               </button>
               <button
                 onClick={goToNext}
-                className={`group w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                className={`group w-10 h-10 cursor-pointer rounded-full border flex items-center justify-center transition-all duration-300 ${
                   isDark 
                     ? "border-white/10 text-gray-400 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]" 
                     : "border-gray-300 text-gray-600 hover:bg-[#e1c693]/10 hover:border-[#e1c693]/50 hover:text-[#e1c693]"

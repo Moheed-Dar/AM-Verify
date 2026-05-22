@@ -195,7 +195,7 @@ export default function OurWork() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
+              className={`relative cursor-pointer flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300 pb-2 ${
                 activeTab === tab.id
                   ? "text-[#e1c693]"
                   : isDark
