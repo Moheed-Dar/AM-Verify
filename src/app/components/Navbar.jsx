@@ -740,24 +740,94 @@
 
 
 
-
-
-
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, X } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 
 const Icons = {
-  Home: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>,
-  Services: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>,
-  Contact: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>,
-  Menu: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="18" x2="20" y2="18" /></svg>,
-  X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+  Home: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  ),
+  Services: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </svg>
+  ),
+  Contact: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  ),
+  Menu: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+    </svg>
+  ),
+  X: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  ),
 };
 
 export default function Navbar() {
@@ -770,7 +840,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [mounted, setMounted] = useState(false);
 
-  // Hydration Fix
+  // ✅ Hydration Fix
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -781,6 +851,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ✅ Hash handling - only on home page
   useEffect(() => {
     if (pathname !== "/") return;
     const handleHashChange = () => {
@@ -788,7 +859,8 @@ export default function Navbar() {
       if (["home", "about", "work"].includes(hash)) {
         setActiveSection(hash);
         const el = document.getElementById(hash);
-        if (el) window.scrollTo({ top: el.offsetTop - 120, behavior: "smooth" });
+        if (el)
+          window.scrollTo({ top: el.offsetTop - 120, behavior: "smooth" });
       }
     };
     if (window.location.hash) setTimeout(handleHashChange, 100);
@@ -796,6 +868,7 @@ export default function Navbar() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, [pathname]);
 
+  // ✅ Intersection Observer - only on home page
   useEffect(() => {
     if (pathname !== "/") return;
     const sections = document.querySelectorAll("section[id], main[id]");
@@ -806,7 +879,8 @@ export default function Navbar() {
             const id = entry.target.id;
             if (["home", "about", "work"].includes(id)) {
               setActiveSection(id);
-              if (window.location.hash !== `#${id}`) window.history.replaceState(null, null, `#${id}`);
+              if (window.location.hash !== `#${id}`)
+                window.history.replaceState(null, null, `#${id}`);
             }
           }
         });
@@ -817,26 +891,47 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, [pathname]);
 
-  useEffect(() => { setIsMenuOpen(false); }, [pathname]);
+  // ✅ Close mobile menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
-  // Theme Toggle
+  // ✅ Reset activeSection when leaving home page
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection("");
+    } else {
+      setActiveSection("home");
+    }
+  }, [pathname]);
+
+  // ✅ Theme Toggle
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
+  // ✅ Navigation handler
   const handleNavigation = (e, href, id) => {
     e.preventDefault();
+
+    // Page links (like /web, /services, /contact)
     if (href.startsWith("/") && href !== "/") {
       router.push(href);
       setIsMenuOpen(false);
       return;
     }
+
+    // Home link or hash-based links
     const targetId = id || "home";
+
+    // If we're on a different page, navigate to home first
     if (pathname !== "/") {
       router.push(`/#${targetId}`);
       setIsMenuOpen(false);
       return;
     }
+
+    // Same page - smooth scroll
     window.history.pushState(null, null, `#${targetId}`);
     setActiveSection(targetId);
     const el = document.getElementById(targetId);
@@ -847,86 +942,183 @@ export default function Navbar() {
     setIsMenuOpen(false);
   };
 
+  // ✅ FIXED: Active link detection
   const isActiveLink = (link) => {
-    if (link.isPageLink) return pathname === link.href;
-    if (pathname === "/") return activeSection === link.id;
+    if (link.isPageLink) {
+      // For page links, match exact pathname
+      return pathname === link.href;
+    }
+    // For hash-based links (Home), only active on "/" page
+    if (link.id === "home") {
+      return pathname === "/" && (activeSection === "home" || activeSection === "");
+    }
+    // For other hash-based links (about, work, etc.)
+    if (pathname === "/") {
+      return activeSection === link.id;
+    }
     return false;
   };
 
+  // ✅ FIXED: navLinks - Home gets id:"home", Web & Design gets isPageLink:true
   const navLinks = [
-    { name: "Home", href: "#home", id: "home", icon: <Icons.Home />, isPageLink: false },
-    { name: "Services", href: "/services", id: null, icon: <Icons.Services />, isPageLink: true },
+    { name: "Home", href: "/", id: "home", icon: <Icons.Home />, isPageLink: false },
+    { name: "Web & Design", href: "/web", id: null, icon: <Icons.Services />, isPageLink: true },
+    { name: "CRM", href: "/services", id: null, icon: <Icons.Services />, isPageLink: true },
     { name: "Contact", href: "/contact", id: null, icon: <Icons.Contact />, isPageLink: true },
   ];
 
+  // ✅ Loading placeholder to prevent hydration mismatch
   if (!mounted) {
     return <nav className="fixed top-0 left-0 w-full z-50 h-20 bg-transparent" />;
   }
 
+  const isDark = theme === "dark";
+
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? "py-2 backdrop-blur-xl shadow-xl border-b" : "py-4 md:py-5 bg-transparent"} 
-        ${isScrolled ? (theme === "dark" ? "bg-[#050505]/90 border-white/5" : "bg-white/90 border-gray-200") : ""}`}>
-        
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+          isScrolled
+            ? "py-2 backdrop-blur-xl shadow-xl border-b"
+            : "py-4 md:py-5 bg-transparent"
+        } ${
+          isScrolled
+            ? isDark
+              ? "bg-[#050505]/90 border-white/5"
+              : "bg-white/90 border-gray-200"
+            : ""
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-6 md:px-12">
-          <div className={`${theme === "dark" ? 'bg-[#0a0a0a01] border-white/10' : 'bg-white border-gray-200'} border shadow-md rounded-lg px-4 md:px-10 py-3 md:py-4 flex justify-between items-center transition-all duration-300 backdrop-blur-md ${isScrolled ? "shadow-lg border-[#e1c693]/30" : ""}`}>
-            
-            <a href="#home" onClick={(e) => handleNavigation(e, "#home", "home")} className="flex items-center flex-shrink-0 z-10">
-              <img src="/images/img1.png" alt="Logo" className="h-10 w-10 md:h-12 md:w-12 object-contain rounded-md" />
+          <div
+            className={`${
+              isDark
+                ? "bg-[#0a0a0a01] border-white/10"
+                : "bg-white border-gray-200"
+            } border shadow-md rounded-lg px-4 md:px-10 py-3 md:py-4 flex justify-between items-center transition-all duration-300 backdrop-blur-md ${
+              isScrolled ? "shadow-lg border-[#e1c693]/30" : ""
+            }`}
+          >
+            {/* Logo */}
+            <a
+              href="#home"
+              onClick={(e) => handleNavigation(e, "#home", "home")}
+              className="flex items-center flex-shrink-0 z-10"
+            >
+              <img
+                src="/images/img1.png"
+                alt="Logo"
+                className="h-10 w-10 md:h-12 md:w-12 object-contain rounded-md"
+              />
             </a>
 
-            <ul className={`hidden md:flex items-center justify-center flex-1 gap-8 lg:gap-10 text-sm font-semibold uppercase tracking-wider ${theme === "dark" ? 'text-gray-400' : 'text-gray-600'}`}>
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <a href={link.href} onClick={(e) => handleNavigation(e, link.href, link.id)} 
-                    className={`flex items-center gap-2 cursor-pointer transition-colors duration-300 ${isActiveLink(link) ? "text-[#e1c693]" : (theme === "dark" ? "text-gray-400 hover:text-[#e1c693]" : "text-gray-600 hover:text-[#a78b54]")}`}>
-                    {link.icon} {link.name}
-                  </a>
-                </li>
-              ))}
+            {/* Desktop Menu */}
+            <ul
+              className={`hidden md:flex items-center justify-center flex-1 gap-8 lg:gap-10 text-sm font-semibold uppercase tracking-wider ${
+                isDark ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              {navLinks.map((link) => {
+                const isActive = isActiveLink(link);
+                return (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      onClick={(e) =>
+                        handleNavigation(e, link.href, link.id)
+                      }
+                      className={`flex items-center gap-2 cursor-pointer transition-colors duration-300 ${
+                        isActive
+                          ? "text-[#e1c693]"
+                          : isDark
+                          ? "text-gray-400 hover:text-[#e1c693]"
+                          : "text-gray-600 hover:text-[#a78b54]"
+                      }`}
+                    >
+                      {link.icon} {link.name}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
 
+            {/* Right Side: Theme Toggle + Mobile Menu Button */}
             <div className="flex items-center flex-shrink-0 cursor-pointer z-10 gap-3">
-              {/* Theme Toggle Button */}
-              <button 
-                onClick={toggleTheme} 
-                className={`p-2 rounded-md cursor-pointer transition-colors duration-300 ${theme === "dark" ? "hover:bg-white/10 text-[#e1c693]" : "hover:bg-gray-100 text-[#a78b54]"}`} 
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-md cursor-pointer transition-colors duration-300 ${
+                  isDark
+                    ? "hover:bg-white/10 text-[#e1c693]"
+                    : "hover:bg-gray-100 text-[#a78b54]"
+                }`}
                 aria-label="Toggle Theme"
               >
-                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                {isDark ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
               </button>
 
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`md:hidden p-2 cursor-pointer rounded-md transition-colors ${theme === "dark" ? "text-gray-300 hover:bg-white/5" : "text-gray-800 hover:bg-gray-100"}`}>
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`md:hidden p-2 cursor-pointer rounded-md transition-colors ${
+                  isDark
+                    ? "text-gray-300 hover:bg-white/5"
+                    : "text-gray-800 hover:bg-gray-100"
+                }`}
+              >
                 {isMenuOpen ? <Icons.X /> : <Icons.Menu />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: -20, scale: 0.95 }} 
-              animate={{ opacity: 1, y: 0, scale: 1 }} 
-              exit={{ opacity: 0, y: -20, scale: 0.95 }} 
-              transition={{ duration: 0.2 }} 
-              className={`md:hidden absolute left-4 right-4 mt-2 border rounded-lg shadow-2xl py-6 px-6 z-50 backdrop-blur-xl ${theme === "dark" ? "bg-[#0a0a0a] border-white/10" : "bg-white border-gray-200"}`}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className={`md:hidden absolute left-4 right-4 mt-2 border rounded-lg shadow-2xl py-6 px-6 z-50 backdrop-blur-xl ${
+                isDark
+                  ? "bg-[#0a0a0a] border-white/10"
+                  : "bg-white border-gray-200"
+              }`}
             >
-              <ul className={`flex flex-col gap-2 text-lg font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-800"}`}>
-                {navLinks.map((link, i) => (
-                  <motion.li 
-                    key={i} 
-                    initial={{ x: -20, opacity: 0 }} 
-                    animate={{ x: 0, opacity: 1 }} 
-                    transition={{ delay: i * 0.05 }} 
-                    className={`py-3 px-4 hover:bg-[#e1c693]/10 rounded-md cursor-pointer transition-colors ${isActiveLink(link) ? "bg-[#e1c693]/10 text-[#e1c693]" : ""}`}
-                  >
-                    <a href={link.href} onClick={(e) => handleNavigation(e, link.href, link.id)} className="flex items-center gap-4">
-                      {link.icon} {link.name}
-                    </a>
-                  </motion.li>
-                ))}
+              <ul
+                className={`flex flex-col gap-2 text-lg font-medium ${
+                  isDark ? "text-gray-300" : "text-gray-800"
+                }`}
+              >
+                {navLinks.map((link, i) => {
+                  const isActive = isActiveLink(link);
+                  return (
+                    <motion.li
+                      key={i}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: i * 0.05 }}
+                      className={`py-3 px-4 hover:bg-[#e1c693]/10 rounded-md cursor-pointer transition-colors ${
+                        isActive
+                          ? "bg-[#e1c693]/10 text-[#e1c693]"
+                          : ""
+                      }`}
+                    >
+                      <a
+                        href={link.href}
+                        onClick={(e) =>
+                          handleNavigation(e, link.href, link.id)
+                        }
+                        className="flex items-center gap-4"
+                      >
+                        {link.icon} {link.name}
+                      </a>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </motion.div>
           )}

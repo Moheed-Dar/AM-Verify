@@ -88,7 +88,7 @@ export default function Testimonials() {
   // Don't render theme-dependent styles until mounted
   if (!mounted) {
     return (
-      <section className="relative overflow-hidden py-16 md:py-24 transition-colors duration-500 bg-[#050505]">
+      <section className="relative overflow-hidden pt-10 md:py-24 transition-colors duration-500 bg-[#050505]">
         <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-12 w-full">
           <div className="mb-8 md:mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#e1c693]/30 rounded-full bg-[#e1c693]/5 mb-4 backdrop-blur-sm">

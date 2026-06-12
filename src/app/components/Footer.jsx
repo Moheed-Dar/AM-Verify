@@ -75,8 +75,9 @@ export default function Footer() {
   // Quick Links Section
   const quickLinks = [
     { name: "Home", href: "/", isPageLink: true, isHashLink: false },
-    { name: "Services", href: "/services", isPageLink: true, isHashLink: false },
+    { name: "CRM", href: "/services", isPageLink: true, isHashLink: false },
     { name: "Contact", href: "/contact", isPageLink: true, isHashLink: false },
+    { name: "Web & Graphics", href: "/web", isPageLink: true, isHashLink: false },
   ];
 
   const supportLinks = [

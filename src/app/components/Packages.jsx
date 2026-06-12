@@ -350,7 +350,7 @@ export default function Packages() {
   // Don't render theme-dependent styles until mounted
   if (!mounted) {
     return (
-      <section className="relative overflow-hidden py-24 transition-colors duration-500 bg-[#050505]">
+      <section className="relative overflow-hidden md:py-24 py-10  transition-colors duration-500 bg-[#050505]">
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#e1c693]/30 rounded-full bg-[#e1c693]/5 mb-6 backdrop-blur-sm">

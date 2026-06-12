@@ -69,7 +69,7 @@ export default function Services() {
     return (
       <section
         id="services"
-        className="relative overflow-hidden py-20 md:py-24 transition-colors duration-500 bg-[#050505]"
+        className="relative overflow-hidden py-10 md:py-24 transition-colors duration-500 bg-[#050505]"
       >
         <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-12 lg:px-16">
           <div className="mb-12 md:mb-16">

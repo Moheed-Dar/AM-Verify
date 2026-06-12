@@ -114,7 +114,7 @@ export default function OurWork() {
       <section
         ref={ref}
         id="work"
-        className="relative overflow-hidden py-20 md:py-28 transition-colors duration-500 bg-[#050505]"
+        className="relative overflow-hidden py-10 md:py-28 transition-colors duration-500 bg-[#050505]"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
